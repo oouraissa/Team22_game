@@ -1,0 +1,27 @@
+fileFormatVersion: 2
+guid: 6b4bc6fbb1899134e8f23912220eaa11
+TrueTypeFontImporter:
+  externalObjects: {}
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontName: Source Han Sans JP
+  fontNames:
+  - Source Han Sans JP
+  fallbackFontReferences:
+  - {fileID: 12800000, guid: cccf7953fe8697d44940f8b0edf9fc1f, type: 3}
+  - {fileID: 12800000, guid: 56843ea7d0d3e7f428dc1d37fba9202a, type: 3}
+  - {fileID: 12800000, guid: c412b1c8ecbd03d4d87cebd0c7f8c014, type: 3}
+  - {fileID: 12800000, guid: 29e8a569fa149ac428abcc67525e423f, type: 3}
+  - {fileID: 12800000, guid: 0742d94c0653f49498734432a75a9a33, type: 3}
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  useLegacyBoundsCalculation: 0
+  shouldRoundAdvanceValue: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
