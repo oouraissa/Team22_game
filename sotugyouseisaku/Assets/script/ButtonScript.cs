@@ -53,7 +53,12 @@ public class ButtonScript : MonoBehaviour
         {
             fade = true;
             firstImages = true;
-        }       
+            if (gameMain.ReturnForDays() == 100)
+            {
+                gameMain.currentstate = GameMain.Gamestate.Clear;
+            }
+        }
+           
     }
 
     public void Pageselect(int page)

@@ -16,8 +16,8 @@ public class GameMain : MonoBehaviour
     private int days;//日数
     private int moneys;//お金
     private int health;//健康度
-    private float FadeoutImagealfa;
-    private float FadeoutTextalfa;
+    private float FadeoutImagealfa;//画面フェイドアルファ値
+    private float FadeoutTextalfa;//テキストフェイドアルファ値
     private float fadetime;//Image
     private float fadeday;//Text
     private float Tairyoku;//体力
@@ -42,6 +42,7 @@ public class GameMain : MonoBehaviour
     public Text Image2;
     public Text Image3;
     public Text OpenDay;
+    //public Text clearedLamp;
 
     private void Start()
     {
@@ -50,7 +51,7 @@ public class GameMain : MonoBehaviour
         Infidelity = false;
         Company = false;
         Good = false;
-        days = 1;
+        days = 99;
         moneys = 30000;
         health = 50;
         Tairyoku = 50;
@@ -73,15 +74,20 @@ public class GameMain : MonoBehaviour
         switch(state)
         {
             case Gamestate.Opning:
-                Opning();break;
+                Opning();
+                break;
             case Gamestate.GamePlay:
-                GamePlay();break;
+                GamePlay();
+                break;
             case Gamestate.GameEnd:
-                GameEnd(); break;
+                GameEnd();
+                break;
             case Gamestate.Clear:
-                Clear();break;
+                Clear();
+                break;
             case Gamestate.GameOver:
-                GameOver();break;
+                GameOver();
+                break;
         }
     }
 
@@ -112,11 +118,12 @@ public class GameMain : MonoBehaviour
         moneyText.text = "所持金：" + moneys + "円";
         OpenDay.text = days + "日目";
         dayText.text = days + "日目";
+        Debug.Log($"'Days' has increased: {days} days");
     }
 
     public void Clear()
     {
-        
+        Debug.Log("Loaded 'Clear' method.");
     }
 
     public void GameOver()
@@ -173,6 +180,31 @@ public class GameMain : MonoBehaviour
             }
 
         }
+        if (currentstate == Gamestate.Clear)
+        {
+            //clearedLamp.gameObject.SetActive(true);
+            FadeOut.gameObject.SetActive(true);
+            FadeoutImagealfa += fadetime;
+            FadeOut.color = new Color(255, 255, 255, FadeoutImagealfa);
+            if (FadeOut.color.a >= 1.0f)
+            {
+                //FadeoutTextalfa += fadetime;
+                ////clearedLamp.color = new Color(0,0,0, FadeoutTextalfa);
+                //if (clearedLamp.color.a >= 1)
+                //{
+                    FadeoutImagealfa = 1.00f;
+                    FadeoutTextalfa = 1.00f;
+                    //clearedLamp.color = new Color(0,0,0, FadeoutTextalfa);
+                    FadeOut.color = new Color(FadeOut.color.r, FadeOut.color.g, FadeOut.color.b, FadeoutImagealfa);
+                    //ScneSelect(Gamestate.Opning);//最後にシーンを変える
+                //}
+                
+            }
+        }
+    }
 
+    public int ReturnForDays()
+    {
+        return days;
     }
 }
