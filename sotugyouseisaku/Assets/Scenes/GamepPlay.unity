@@ -152,6 +152,7 @@ MonoBehaviour:
   Image2: {fileID: 2034432917}
   Image3: {fileID: 947603179}
   OpenDay: {fileID: 607724890}
+  rndMGLimit: 25
 --- !u!4 &31103716
 Transform:
   m_ObjectHideFlags: 0

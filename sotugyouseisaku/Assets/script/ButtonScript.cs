@@ -53,6 +53,16 @@ public class ButtonScript : MonoBehaviour
         {
             fade = true;
             firstImages = true;
+
+            if (gameMain.ReturnForGMiniLeft() > 0)
+            {
+                gameMain.GMiniSubtract();
+                Debug.Log($"int.miniGameLeft has decreased: {gameMain.ReturnForGMiniLeft().ToString()}");
+                Debug.Log($"int.rndMiniGame set: {gameMain.ReturnForRndGMini().ToString()}");
+                if(gameMain.ReturnForRndGMini()==0)
+                    gameMain.MiniGame();
+            }
+
             if (gameMain.ReturnForDays() == 100)
             {
                 gameMain.currentstate = GameMain.Gamestate.Clear;
