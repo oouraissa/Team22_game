@@ -3,20 +3,19 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Foodscript : MonoBehaviour
-{
-    enum Foods
+{    enum Foods
     {
-
         Beer,
         Ryokutya,
         StrongZero,
         Been,
         Karaage,
-        Ramen
+        Ramen,
+        Bento
     }
 
     private List<Foods> currentfoods = new List<Foods>();
-    private int foodhelth;
+    private int foodsick;
     private int foodmoney;
     private float tairyoku;
     public void Onclick()
@@ -29,9 +28,9 @@ public class Foodscript : MonoBehaviour
             case "Been": SelectFood(Foods.Been); break;
             case "Karaage": SelectFood(Foods.Karaage); break;
             case "Ramen": SelectFood(Foods.Ramen); break;
+            case "Bento": SelectFood(Foods.Ramen); break;
         }       
-        Debug.Log(tairyoku + "+" + foodmoney);
-       
+        Debug.Log(tairyoku + "+" + foodmoney);      
     }
 
     public float TairyokuCalcu()
@@ -52,7 +51,7 @@ public class Foodscript : MonoBehaviour
         {
             case Foods.Beer:
                 currentfoods.Add(Foods.Beer);
-                tairyoku += 15;
+                tairyoku += 20;
                 foodmoney += 300;break;
             case Foods.Ryokutya:
                 currentfoods.Add(Foods.Ryokutya);
@@ -60,7 +59,7 @@ public class Foodscript : MonoBehaviour
                 foodmoney += 160; break;
             case Foods.StrongZero:
                 currentfoods.Add(Foods.StrongZero);
-                tairyoku += 30;
+                tairyoku += 15;
                 foodmoney += 150; break;
             case Foods.Been:
                 currentfoods.Add(Foods.Been);
@@ -72,8 +71,12 @@ public class Foodscript : MonoBehaviour
                 foodmoney += 500; break;
             case Foods.Ramen:
                 currentfoods.Add(Foods.Ramen);
+                tairyoku += 30;
+                foodmoney += 650; break;
+            case Foods.Bento:
+                currentfoods.Add(Foods.Bento);
                 tairyoku += 40;
-                foodmoney += 650; break;             
+                break;
         }
         
     }
