@@ -150,7 +150,7 @@ public class GameText : MonoBehaviour
 
     public string StatusText()
     {
-        string text = statusWords[0,1];
+        string text = statusWords[2,1];
         return text;
     }
 

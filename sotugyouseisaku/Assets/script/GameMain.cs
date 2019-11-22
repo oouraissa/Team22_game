@@ -59,20 +59,23 @@ public class GameMain : MonoBehaviour
         Company = false;
         Good = false;
         pickingFlag = false;//I dont get it how work
-        days = 6;
+        days = 1;
         miniGameLeft = 0;
         rndMiniGame = 0;
         moneys = 30000;
         health = 50;
         Tairyoku = 50;
+        gameText.TextSelect();//Text
         OpenDay.color = new Color(OpenDay.color.r, OpenDay.color.g, OpenDay.color.b, 0);
         FadeOut.color = new Color(FadeOut.color.r, FadeOut.color.g, FadeOut.color.b, 0);
         OpenDay.gameObject.SetActive(false);
         FadeOut.gameObject.SetActive(false);
         gameText.TextSelect();       
-        dialytext = gameText.DialyText(1, 1);
+        dialytext = gameText.DialyText();
         eventtext = gameText.EventText();
-        statustext = gameText.StatusText(2,1);
+        statustext = gameText.StatusText();
+        moneyText.text = "所持金：\n" + moneys + "円";
+        dayText.text = days + "日目";
         //Debug.Log("a");
         ScneSelect(Gamestate.GamePlay);//最初はOpningに行かない
     }
@@ -110,8 +113,8 @@ public class GameMain : MonoBehaviour
         moneys -= foodManager.Moneys();
         Tairyoku += foodManager.Tairyoku();
         //buttonScript.PositionReset();
-        dialytext = gameText.DialyText(Random.Range(1, 4), 1);
-        eventtext = gameText.EventText(Random.Range(1, 3), 1);
+        dialytext = gameText.DialyText(Random.Range(1, 11), 1);
+        eventtext = gameText.EventText(Random.Range(0, 2), 1);
         statustext = gameText.StatusText(Random.Range(1, 4), 1);
         if (days <= (100 - 7)) 
         {
@@ -134,8 +137,7 @@ public class GameMain : MonoBehaviour
     public void GamePlay()
     {
         Debug.Log("Loaded method GamePlay");
-
-        gameText.TextSelect();
+        
         Image1.text = dialytext + "\n\n" + eventtext + "\n\n" + statustext;       
         
         
@@ -145,7 +147,7 @@ public class GameMain : MonoBehaviour
     {
         days++;
         buttonScript.PositionReset();
-        moneyText.text = "所持金：" + moneys + "円";
+        moneyText.text = "所持金：\n" + moneys + "円";
         OpenDay.text = days + "日目";
         dayText.text = days + "日目";
         Debug.Log($"'Days' has increased: {days} days");
