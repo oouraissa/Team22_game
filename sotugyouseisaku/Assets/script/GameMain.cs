@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class GameMain : MonoBehaviour
@@ -8,12 +9,14 @@ public class GameMain : MonoBehaviour
     public enum Gamestate
     {
         Opning,
+        MiniGame,
         GamePlay,
         GameEnd,
         Clear,
         GameOver
     }
     private int days;//日数
+    private int miniGameLeft;//ミニゲーム発生期間？
     private int moneys;//お金
     private int health;//健康度
     private float FadeoutImagealfa;//画面フェイドアルファ値
@@ -21,9 +24,11 @@ public class GameMain : MonoBehaviour
     private float fadetime;//Image
     private float fadeday;//Text
     private float Tairyoku;//体力
+    private int rndMiniGame;//ミニゲームフラッグランダマイザ
     static bool Infidelity;//不倫end
     static bool Company;//皆勤end
     static bool Good;//Goodend
+    static bool pickingFlag;
 
     public ButtonScript buttonScript;
     public GameText gameText;
@@ -43,6 +48,8 @@ public class GameMain : MonoBehaviour
     public Text Image3;
     public Text OpenDay;
     //public Text clearedLamp;
+    [Header("ピッキングイベントを呼び出すための乱数の上限を指定")]//消してもOK
+    public int rndMGLimit = 25;
 
     private void Start()
     {
@@ -51,7 +58,10 @@ public class GameMain : MonoBehaviour
         Infidelity = false;
         Company = false;
         Good = false;
-        days = 99;
+        pickingFlag = false;//I dont get it how work
+        days = 6;
+        miniGameLeft = 0;
+        rndMiniGame = 0;
         moneys = 30000;
         health = 50;
         Tairyoku = 50;
@@ -76,6 +86,9 @@ public class GameMain : MonoBehaviour
             case Gamestate.Opning:
                 Opning();
                 break;
+            case Gamestate.MiniGame:
+                MiniGame();
+                break;
             case Gamestate.GamePlay:
                 GamePlay();
                 break;
@@ -92,19 +105,36 @@ public class GameMain : MonoBehaviour
     }
 
     public void Opning()
-    {            
+    {
+        Debug.Log("Loaded method Opening");
         moneys -= foodManager.Moneys();
         Tairyoku += foodManager.Tairyoku();
         //buttonScript.PositionReset();
         dialytext = gameText.DialyText(Random.Range(1, 4), 1);
         eventtext = gameText.EventText(Random.Range(1, 3), 1);
         statustext = gameText.StatusText(Random.Range(1, 4), 1);
-
-        
+        if (days <= (100 - 7)) 
+        {
+            if((days % 7) == 0)
+            {
+                pickingFlag = true;
+                miniGameLeft = 5;
+            }
+            else if((days%7)==6){
+                pickingFlag = false;
+            }
+        }
+        if (pickingFlag == true)
+        {
+            Debug.Log($"[Test] Bool: PickingFlag is {pickingFlag.ToString()}");
+            
+        }
     }
 
     public void GamePlay()
     {
+        Debug.Log("Loaded method GamePlay");
+
         gameText.TextSelect();
         Image1.text = dialytext + "\n\n" + eventtext + "\n\n" + statustext;       
         
@@ -131,6 +161,11 @@ public class GameMain : MonoBehaviour
 
     }
 
+    public void MiniGame()
+    {
+        SceneManager.LoadScene("minigame");
+    }
+
     public Gamestate Gamestates()
     {
         return currentstate;
@@ -138,6 +173,8 @@ public class GameMain : MonoBehaviour
 
     void Update()
     {
+        rndMiniGame = Random.Range(0, rndMGLimit);
+
         //フェードアウト関連
         if(currentstate==Gamestate.Opning)
         {
@@ -206,5 +243,20 @@ public class GameMain : MonoBehaviour
     public int ReturnForDays()
     {
         return days;
+    }
+
+    public int ReturnForGMiniLeft()
+    {
+        return miniGameLeft;
+    }
+
+    public void GMiniSubtract()
+    {
+        miniGameLeft--;
+    }
+
+    public int ReturnForRndGMini()
+    {
+        return rndMiniGame;
     }
 }
