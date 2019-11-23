@@ -61,6 +61,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\script\ButtonScript.cs" />
+    <Compile Include="Assets\script\Byouki.cs" />
     <Compile Include="Assets\script\FoodManager.cs" />
     <Compile Include="Assets\script\Foodscript.cs" />
     <Compile Include="Assets\script\GameMain.cs" />

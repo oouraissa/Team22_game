@@ -23,7 +23,7 @@ public class GameMain : MonoBehaviour
     private float FadeoutTextalfa;//テキストフェイドアルファ値
     private float fadetime;//Image
     private float fadeday;//Text
-    private float Tairyoku;//体力
+    private float tairyoku;//体力
     private int rndMiniGame;//ミニゲームフラッグランダマイザ
     static bool Infidelity;//不倫end
     static bool Company;//皆勤end
@@ -64,7 +64,7 @@ public class GameMain : MonoBehaviour
         rndMiniGame = 0;
         moneys = 30000;
         health = 50;
-        Tairyoku = 50;
+        tairyoku = 50;
         gameText.TextSelect();//Text
         OpenDay.color = new Color(OpenDay.color.r, OpenDay.color.g, OpenDay.color.b, 0);
         FadeOut.color = new Color(FadeOut.color.r, FadeOut.color.g, FadeOut.color.b, 0);
@@ -110,8 +110,6 @@ public class GameMain : MonoBehaviour
     public void Opning()
     {
         Debug.Log("Loaded method Opening");
-        moneys -= foodManager.Moneys();
-        Tairyoku += foodManager.Tairyoku();
         //buttonScript.PositionReset();
         dialytext = gameText.DialyText(Random.Range(1, 11), 1);
         eventtext = gameText.EventText(Random.Range(0, 2), 1);
@@ -145,6 +143,10 @@ public class GameMain : MonoBehaviour
 
     public void GameEnd()
     {
+        moneys -= foodManager.Moneys();
+        tairyoku += foodManager.Tairyoku();
+        foodManager.SelectByouki();
+        foodManager.ByoukiText();
         days++;
         buttonScript.PositionReset();
         moneyText.text = "所持金：\n" + moneys + "円";
@@ -160,7 +162,7 @@ public class GameMain : MonoBehaviour
 
     public void GameOver()
     {
-
+        OpenDay.text ="死 ん だ";
     }
 
     public void MiniGame()
@@ -173,6 +175,11 @@ public class GameMain : MonoBehaviour
         return currentstate;
     }
 
+    public float Tairyoku()
+    {
+        return tairyoku;
+    }
+
     void Update()
     {
         rndMiniGame = Random.Range(0, rndMGLimit);
@@ -180,6 +187,7 @@ public class GameMain : MonoBehaviour
         //フェードアウト関連
         if(currentstate==Gamestate.Opning)
         {
+            Debug.Log(currentstate);
             FadeoutTextalfa -= fadetime;           
             OpenDay.color = new Color(OpenDay.color.r, OpenDay.color.g, OpenDay.color.b, FadeoutTextalfa);            
             if (OpenDay.color.a<=0.5f)
@@ -214,7 +222,8 @@ public class GameMain : MonoBehaviour
                     FadeoutTextalfa = 1.00f;
                     OpenDay.color = new Color(OpenDay.color.r, OpenDay.color.g, OpenDay.color.b, FadeoutTextalfa);
                     FadeOut.color = new Color(FadeOut.color.r, FadeOut.color.g, FadeOut.color.b, FadeoutImagealfa);
-                    ScneSelect(Gamestate.Opning);//最後にシーンを変える
+                    foodManager.Scene();//最後にシーンを変える
+                    
                 }
             }
 

@@ -5,36 +5,33 @@ using UnityEngine.UI;
 
 public class FoodManager : MonoBehaviour
 {
-    enum Byouki
-    {
-        風邪,
-        貧血,
-        食中毒,
-        糖尿病,
-        不眠症,
-        高血圧,
-        栄養失調,
-        ガン,
-        肺炎,
-        脳卒中
-    }
+    //enum Byouki
+    //{
+    //    風邪,
+    //    貧血,
+    //    食中毒,
+    //    糖尿病,
+    //    不眠症,
+    //    高血圧,
+    //    栄養失調,
+    //    ガン,
+    //    肺炎,
+    //    脳卒中
+    //}
+    
     public float tairyoku;
     public GameMain gameMain;
     public int foodmoney;
     public Image byoukiImage;
     public Text Listtext;
-    public bool byoukibool;
     public int deathday;
+    private bool deathbool=false;
     private List<Byouki> currentByouki = new List<Byouki>();
 
-    private void Start()
-    {
-        byoukibool = false;
-    }
     /// <summary>
     /// 病気をテキストに記載
     /// </summary>
-    public void CurrentByouki()
+    public void ByoukiText()
     {
         if (currentByouki.Count == 0)
         {
@@ -42,15 +39,10 @@ public class FoodManager : MonoBehaviour
         }
         else
         {
-            byoukibool = true;
             byoukiImage.gameObject.SetActive(true);
             foreach (var i in currentByouki)
             {
-                Listtext.text = i.ToString() + "\n";
-                if (i.ToString() == Byouki.肺炎.ToString())
-                {
-                   
-                }                               
+                Listtext.text = i.ToString() + "\n";                                             
             }
         }       
     }
@@ -70,29 +62,36 @@ public class FoodManager : MonoBehaviour
 
     public void ByoukiDeath()
     {
-        if(deathday == 0&&byoukibool==true)
-        {
-            
-        }
         foreach(var i in currentByouki)//特殊な病気の組み合わせ
         {
+            i.Death();
             int KHS = 0;//風邪、貧血、食中毒のカウント
-            if(i.ToString()==Byouki.脳卒中.ToString())
+            if(i.ToString()== Byouki.Byoukistate.脳卒中.ToString())
             {
-                gameMain.ScneSelect(GameMain.Gamestate.GameOver);//脳卒中は絶対死
+                deathbool=true;//脳卒中は絶対死
             }
-            else if(i.ToString()==Byouki.風邪.ToString()|| i.ToString() == Byouki.貧血.ToString()||i.ToString() == Byouki.食中毒.ToString())
+       else if(i.ToString()== Byouki.Byoukistate.風邪.ToString() || i.ToString() == Byouki.Byoukistate.貧血.ToString()
+               || i.ToString() == Byouki.Byoukistate.食中毒.ToString())
             {
                 KHS++;
                 if(KHS==3)
                 {
-                    if(i.ToString()!= Byouki.風邪.ToString() ||i.ToString()!= Byouki.貧血.ToString()|| i.ToString() != Byouki.食中毒.ToString())
+                    if(i.ToString()!= Byouki.Byoukistate.風邪.ToString() || i.ToString()!= Byouki.Byoukistate.貧血.ToString() 
+                        || i.ToString()!= Byouki.Byoukistate.食中毒.ToString())
                     {
-                        gameMain.ScneSelect(GameMain.Gamestate.GameOver);//風邪、貧血、食中毒＋何かで死
+                        deathbool=true;//風邪、貧血、食中毒＋何かで死
                     }
                 }
             }
         }
+    }
+
+    public void Scene()
+    {
+        if(deathbool)
+            gameMain.ScneSelect(GameMain.Gamestate.GameOver);
+        else
+        gameMain.ScneSelect(GameMain.Gamestate.Opning); //死なないのならばOpningシーンへ
     }
 
 
@@ -115,17 +114,41 @@ public class FoodManager : MonoBehaviour
     /// </summary>
     public void SelectByouki()
     {
-        float currenttairyoku = Tairyoku();
+        float currenttairyoku = gameMain.Tairyoku();
         if(currenttairyoku<=0)
         {
-            currentByouki.Add(Byouki.脳卒中);
+            
+            foreach(var i in currentByouki)
+            {
+                if(i.ToString()==Byouki.Byoukistate.脳卒中.ToString())//病気のリストに同じ名前があったらスルー
+                {
+                    return;
+                }
+                else
+                {
+                    Byouki nousottyuu = new Byouki(Byouki.Byoukistate.脳卒中, 0);
+                    currentByouki.Add(nousottyuu);
+                }              
+            }          
         }
         else if(currenttairyoku>0&&currenttairyoku<=20)
         {
             int random = Random.Range(1, 4);
             if(random==1)
             {
-                currentByouki.Add(Byouki.肺炎);
+                Byouki haien = new Byouki(Byouki.Byoukistate.肺炎, 10);
+                foreach (var i in currentByouki)
+                {
+                    if (i.ToString() == Byouki.Byoukistate.肺炎.ToString())
+                    {
+                        return;
+                    }
+                    else
+                    {
+                        currentByouki.Add(haien);
+                    }
+                   
+                }
             }
         }
         else if(currenttairyoku > 20 && currenttairyoku <= 50)
@@ -133,11 +156,36 @@ public class FoodManager : MonoBehaviour
             int random = Random.Range(1, 6);
             if(random==1)
             {
-                currentByouki.Add(Byouki.風邪);
+                
+                foreach (var i in currentByouki)
+                {
+                    if (i.ToString() == Byouki.Byoukistate.風邪.ToString())
+                    {
+                        return;
+                    }
+                    else
+                    {
+                        Byouki kaze = new Byouki(Byouki.Byoukistate.風邪);
+                        currentByouki.Add(kaze);
+                    }
+                       
+                }
             }
             else if(random==2)
             {
-                currentByouki.Add(Byouki.貧血);
+                
+                foreach (var i in currentByouki)
+                {
+                    if (i.ToString() == Byouki.Byoukistate.貧血.ToString())
+                    {
+                        return;
+                    }
+                    else
+                    {
+                        Byouki hinketu = new Byouki(Byouki.Byoukistate.貧血);
+                        currentByouki.Add(hinketu);
+                    }
+                }
             }
         }
         else if(currenttairyoku>50&&foodmoney!=0)
@@ -145,7 +193,19 @@ public class FoodManager : MonoBehaviour
             int random = Random.Range(1, 11);
             if (random == 1)
             {
-                currentByouki.Add(Byouki.食中毒);
+                Byouki byouki = new Byouki(Byouki.Byoukistate.食中毒);
+                foreach (var i in currentByouki)
+                {
+                    if (i.ToString() == Byouki.Byoukistate.食中毒.ToString())
+                    {
+                        return;
+                    }
+                    else
+                    {
+                        Byouki shokutyudoku = new Byouki(Byouki.Byoukistate.食中毒);
+                        currentByouki.Add(shokutyudoku);
+                    }
+                }
             }
         }
     }
