@@ -10,23 +10,24 @@ public class ButtonScript : MonoBehaviour
     public GameObject Image;
     public GameObject Image2;
     public GameObject Image3;
+    public Text OpenDay;
     public Image fadeImage;
     public Text button2;
     public GameMain gameMain;
+    public FoodManager foodManager;
     public float novelspeed;
     private bool firstClick;
     private bool lastClick;
     private bool changetime;
     private bool firstImages;
-    private bool fade;
+    
     private int Imagenumber;
     private float Imagesspeed;
     private float FadeoutImagealfa;
-    private float alfa;
+    
     private GameObject[]Images = new GameObject[3];
     public void OnClick()
-    {
-        
+    {        
         if(changetime==false)
         {
             Pageselect(1);
@@ -44,14 +45,17 @@ public class ButtonScript : MonoBehaviour
         //Debug.Log("i");
         Imagesspeed = -2;
         firstImages = false;
-        changetime = true;
+        //changetime = true;
     }
 
     public void OnClick4()
     {
         if(gameMain.Gamestates()==GameMain.Gamestate.Opning)
-        {
-            fade = true;
+        {           
+            gameMain.FadeIn(true);
+            gameMain.GamePlay();
+            //gameMain.ScneSelect(GameMain.Gamestate.GamePlay);
+
             firstImages = true;
 
             if (gameMain.ReturnForGMiniLeft() > 0)
@@ -89,13 +93,26 @@ public class ButtonScript : MonoBehaviour
             case 1:               
                 if(lastClick&&gameMain.Gamestates()==GameMain.Gamestate.GamePlay)
                 {
-                    gameMain.ScneSelect(GameMain.Gamestate.GameEnd);
-                    //firstClick = true;
+                    gameMain.MoneyTairyokuCalcu();
+                    foodManager.SelectByouki();
+                    foodManager.ByoukiText();
+                    foodManager.SpecialDeath();
+                    if (foodManager.Deathbool() == true)
+                    {
+                        gameMain.GameOver();
+                        gameMain.FadeIn(true);
+                    }
+                    else
+                    {
+                        gameMain.Opning();
+                        gameMain.FadeIn(true);
+                    }                   
+                    
                     lastClick = false;
                     changetime = true;
                 }
                 else
-                novelspeed = -1;  break;
+                novelspeed = -1; Debug.Log("Burton1終了"); break;
             case 2: 
                 if(firstClick)
                 {
@@ -125,46 +142,15 @@ public class ButtonScript : MonoBehaviour
         Imagenumber = 0;
     }
 
-    private void FadeOut(GameMain.Gamestate game)
-    {
-        switch(game)
-        {
-             case GameMain.Gamestate.Opning:
-             fadeImage.gameObject.SetActive(true);        
-             FadeoutImagealfa +=alfa;
-             fadeImage.color = new Color(fadeImage.color.r, fadeImage.color.g, fadeImage.color.b, FadeoutImagealfa);
-             if (fadeImage.color.a >= 1.00f)
-             {
-                    Debug.Log("a");
-                    FadeoutImagealfa = 1.00f;
-                    fadeImage.color = new Color(fadeImage.color.r, fadeImage.color.g, fadeImage.color.b, FadeoutImagealfa);
-                    gameMain.ScneSelect(GameMain.Gamestate.GamePlay);
-             }
-             break;
 
-            case GameMain.Gamestate.GamePlay:
-                FadeoutImagealfa -= alfa;
-                fadeImage.color = new Color(fadeImage.color.r, fadeImage.color.g, fadeImage.color.b, FadeoutImagealfa);
-                if (fadeImage.color.a < 0.0f)
-                {
-                    Debug.Log(fadeImage.color.a);
-                    FadeoutImagealfa = 0.00f;
-                    fadeImage.color = new Color(fadeImage.color.r, fadeImage.color.g, fadeImage.color.b, FadeoutImagealfa);
-                    fadeImage.gameObject.SetActive(false);
-                    fade = false;
-                }
-                break;
-        }
-        
-    }
+    
 
     // Start is called before the first frame update
     void Start()
     {
         Imagenumber = 0;
         novelspeed = 0;
-        alfa = 0.01f;
-        fade = false;
+        
         changetime = false;
         firstImages = true;
         firstClick = true;
@@ -187,11 +173,11 @@ public class ButtonScript : MonoBehaviour
             //Debug.Log("i");
         }
 
-        if(fade==true)
-        {
-            FadeOut(gameMain.currentstate);
+        //if(fade==true)
+        //{
+        //    FadeOut(gameMain.currentstate);
            
-        }
+        //}
 
         if(gameMain.currentstate==GameMain.Gamestate.GamePlay&&Imagenumber==2)
         {

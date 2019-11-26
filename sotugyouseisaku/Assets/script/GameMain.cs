@@ -22,9 +22,11 @@ public class GameMain : MonoBehaviour
     private float FadeoutImagealfa;//画面フェイドアルファ値
     private float FadeoutTextalfa;//テキストフェイドアルファ値
     private float fadetime;//Image
-    private float fadeday;//Text
+    
     private float tairyoku;//体力
     private int rndMiniGame;//ミニゲームフラッグランダマイザ
+
+    public bool fadeIn;//フェードインの切り替え
     static bool Infidelity;//不倫end
     static bool Company;//皆勤end
     static bool Good;//Goodend
@@ -53,11 +55,11 @@ public class GameMain : MonoBehaviour
 
     private void Start()
     {
+        FadeoutImagealfa = 0.0f;
         fadetime = 0.01f;
-        fadeday = 0.01f;
-        Infidelity = false;
-        Company = false;
-        Good = false;
+       
+        fadeIn = false;
+       
         pickingFlag = false;//I dont get it how work
         days = 1;
         miniGameLeft = 0;
@@ -65,7 +67,6 @@ public class GameMain : MonoBehaviour
         moneys = 30000;
         health = 50;
         tairyoku = 50;
-        gameText.TextSelect();//Text
         OpenDay.color = new Color(OpenDay.color.r, OpenDay.color.g, OpenDay.color.b, 0);
         FadeOut.color = new Color(FadeOut.color.r, FadeOut.color.g, FadeOut.color.b, 0);
         OpenDay.gameObject.SetActive(false);
@@ -74,12 +75,17 @@ public class GameMain : MonoBehaviour
         dialytext = gameText.DialyText();
         eventtext = gameText.EventText();
         statustext = gameText.StatusText();
+        OpenDay.text = days + "日目";
         moneyText.text = "所持金：\n" + moneys + "円";
         dayText.text = days + "日目";
         //Debug.Log("a");
         ScneSelect(Gamestate.GamePlay);//最初はOpningに行かない
     }
     
+    /// <summary>
+    /// シーンを設定
+    /// </summary>
+    /// <param name="state"></param>
     public void ScneSelect(Gamestate state)
     {
         currentstate = state;
@@ -87,13 +93,13 @@ public class GameMain : MonoBehaviour
         switch(state)
         {
             case Gamestate.Opning:
-                Opning();
+                
                 break;
             case Gamestate.MiniGame:
                 MiniGame();
                 break;
             case Gamestate.GamePlay:
-                GamePlay();
+                
                 break;
             case Gamestate.GameEnd:
                 GameEnd();
@@ -102,16 +108,158 @@ public class GameMain : MonoBehaviour
                 Clear();
                 break;
             case Gamestate.GameOver:
-                GameOver();
+                
+                break;
+        }
+    }
+
+    /// <summary>
+    /// フェードイン、基本シーンの最後に実行
+    /// </summary>
+    /// <param name="game"></param>
+    public void FadeInImage(Gamestate game)
+    {
+        switch (game)
+        {
+            case GameMain.Gamestate.Opning://フェードイン(画像のみ)
+                if(fadeIn)
+                {
+                    FadeOut.gameObject.SetActive(true);
+                    FadeoutImagealfa += fadetime;
+                    FadeOut.color = new Color(FadeOut.color.r, FadeOut.color.g, FadeOut.color.b, FadeoutImagealfa);
+                    if (FadeOut.color.a >= 1.0f)
+                    {
+                        FadeoutImagealfa = 1.00f;
+                        FadeOut.color = new Color(FadeOut.color.r, FadeOut.color.g, FadeOut.color.b, 1);
+                        ScneSelect(Gamestate.GamePlay);
+                        fadeIn = false;
+                    }                    
+                }
+                break;
+            case GameMain.Gamestate.GamePlay://フェードイン+日数表示                
+                if (fadeIn)
+                {
+                    Debug.Log("GamePlayフェードイン");                  
+                    FadeoutImagealfa += fadetime;
+                    FadeOut.color = new Color(FadeOut.color.r, FadeOut.color.g, FadeOut.color.b, FadeoutImagealfa);                  
+                    if (FadeOut.color.a >= 0.5f)
+                    {                       
+                        FadeoutTextalfa += fadetime;                       
+                        OpenDay.color = new Color(OpenDay.color.r, OpenDay.color.g, OpenDay.color.b, FadeoutTextalfa);
+                        if (OpenDay.color.a >= 1)
+                        {
+                            FadeoutImagealfa = 1.00f;
+                            FadeoutTextalfa = 1.00f;
+                            OpenDay.color = new Color(OpenDay.color.r, OpenDay.color.g, OpenDay.color.b, 1);
+                            FadeOut.color = new Color(FadeOut.color.r, FadeOut.color.g, FadeOut.color.b, 1);
+                            if(foodManager.Deathbool()==true)
+                            {
+                                ScneSelect(Gamestate.GameOver);
+                                fadeIn = false;
+                            }
+                            else
+                            {
+                                ScneSelect(Gamestate.Opning);
+                                fadeIn = false;
+                            }
+                        }
+                    }
+                }                
+             break;
+        }
+            
+    }
+    /// <summary>
+    /// フェードアウト、次のシーンの最初に実行
+    /// </summary>
+    /// <param name="game"></param>
+    public void FadeOutImage(Gamestate game)
+    {
+        switch (game)
+        {
+            case GameMain.Gamestate.Opning:///シーンの始まりにフェードアウト+日数非表示
+                if (FadeOut.gameObject.activeSelf == true && OpenDay.gameObject.activeSelf==true&&fadeIn == false)
+                {
+                    Debug.Log("Opning、 フェードアウト");
+                    FadeoutTextalfa -= fadetime;
+                    OpenDay.color = new Color(OpenDay.color.r, OpenDay.color.g, OpenDay.color.b, FadeoutTextalfa);
+                    if (OpenDay.color.a <= 0.5f)
+                    {
+                        FadeoutImagealfa -= fadetime;
+                        FadeOut.color = new Color(FadeOut.color.r, FadeOut.color.g, FadeOut.color.b, FadeoutImagealfa);
+                        if (FadeOut.color.a <= 0)
+                        {
+                            FadeoutTextalfa = 0.00f;
+                            FadeoutImagealfa = 0.00f;
+                            OpenDay.color = new Color(OpenDay.color.r, OpenDay.color.g, OpenDay.color.b, 0);
+                            FadeOut.color = new Color(FadeOut.color.r, FadeOut.color.g, FadeOut.color.b, 0);
+                            OpenDay.gameObject.SetActive(false);
+                            FadeOut.gameObject.SetActive(false);
+                            //ScneSelect(Gamestate.GamePlay);//最後にシーンを変える
+                        }
+                    }
+                }                  
+                break;
+
+            case GameMain.Gamestate.GameOver:
+                if (FadeOut.gameObject.activeSelf == true && OpenDay.gameObject.activeSelf == true && fadeIn == false)
+                {
+                    Debug.Log("GameOver、 フェードアウト");
+                    FadeoutTextalfa -= fadetime;
+                    OpenDay.color = new Color(OpenDay.color.r, OpenDay.color.g, OpenDay.color.b, FadeoutTextalfa);
+                    if (OpenDay.color.a <= 0.5f)
+                    {
+                        FadeoutImagealfa -= fadetime;
+                        FadeOut.color = new Color(FadeOut.color.r, FadeOut.color.g, FadeOut.color.b, FadeoutImagealfa);
+                        if (FadeOut.color.a <= 0)
+                        {
+                            FadeoutTextalfa = 0.00f;
+                            FadeoutImagealfa = 0.00f;
+                            OpenDay.color = new Color(OpenDay.color.r, OpenDay.color.g, OpenDay.color.b, 0);
+                            FadeOut.color = new Color(FadeOut.color.r, FadeOut.color.g, FadeOut.color.b, 0);
+                            OpenDay.gameObject.SetActive(false);
+                            FadeOut.gameObject.SetActive(false);
+                            //ScneSelect(Gamestate.GamePlay);//最後にシーンを変える
+                        }
+                    }
+                }
+                break;
+
+
+
+            case GameMain.Gamestate.GamePlay:///シーンの始まりにフェードアウト
+                if (FadeOut.gameObject.activeSelf==true&&fadeIn == false)
+                {
+                    Debug.Log("GamePlay フェードアウト");
+                    FadeoutImagealfa -= fadetime;
+                    FadeOut.color = new Color(FadeOut.color.r, FadeOut.color.g, FadeOut.color.b, FadeoutImagealfa);
+                    if (FadeOut.color.a <= 0)
+                    {
+                        FadeoutImagealfa = 0.00f;
+                        FadeOut.color = new Color(FadeOut.color.r, FadeOut.color.g, FadeOut.color.b, 0);
+                        FadeOut.gameObject.SetActive(false);
+                       
+                    }                  
+                }
                 break;
         }
     }
 
     public void Opning()
     {
+        days++;
+        OpenDay.gameObject.SetActive(true);
+        FadeOut.gameObject.SetActive(true);
+        moneyText.text = "所持金：\n" + moneys + "円";
+        dayText.text = days + "日目";
+        OpenDay.text = days + "日目";
+        Debug.Log(moneys + "と" + tairyoku);
+        foodManager.MoneyandTairyokuReset();       
+        buttonScript.PositionReset();
+        Debug.Log($"'Days' has increased: {days} days");
         Debug.Log("Loaded method Opening");
         //buttonScript.PositionReset();
-        dialytext = gameText.DialyText(Random.Range(1, 11), 1);
+        dialytext = gameText.DialyText(Random.Range(1, 10), 1);
         eventtext = gameText.EventText(Random.Range(0, 2), 1);
         statustext = gameText.StatusText(Random.Range(1, 4), 1);
         if (days <= (100 - 7)) 
@@ -130,29 +278,20 @@ public class GameMain : MonoBehaviour
             Debug.Log($"[Test] Bool: PickingFlag is {pickingFlag.ToString()}");
             
         }
+        Debug.Log("Opning終了");
+
     }
 
     public void GamePlay()
-    {
+    {       
         Debug.Log("Loaded method GamePlay");
-        
-        Image1.text = dialytext + "\n\n" + eventtext + "\n\n" + statustext;       
-        
-        
+        tairyoku -= Random.Range(15, 31);
+        Image1.text = dialytext + "\n\n" + eventtext + "\n\n" + statustext;              
     }
 
     public void GameEnd()
     {
-        moneys -= foodManager.Moneys();
-        tairyoku += foodManager.Tairyoku();
-        foodManager.SelectByouki();
-        foodManager.ByoukiText();
-        days++;
-        buttonScript.PositionReset();
-        moneyText.text = "所持金：\n" + moneys + "円";
-        OpenDay.text = days + "日目";
-        dayText.text = days + "日目";
-        Debug.Log($"'Days' has increased: {days} days");
+        
     }
 
     public void Clear()
@@ -161,8 +300,17 @@ public class GameMain : MonoBehaviour
     }
 
     public void GameOver()
-    {
-        OpenDay.text ="死 ん だ";
+    {  
+        days++;
+        OpenDay.gameObject.SetActive(true);
+        FadeOut.gameObject.SetActive(true);
+        moneyText.text = "所持金：\n" + moneys + "円";
+        dayText.text = days + "日目";
+        OpenDay.text = "死 ん だ";
+        Debug.Log(moneys + "と" + tairyoku);
+        foodManager.MoneyandTairyokuReset();
+        buttonScript.PositionReset();
+        Debug.Log("GameOver終了");
     }
 
     public void MiniGame()
@@ -175,82 +323,60 @@ public class GameMain : MonoBehaviour
         return currentstate;
     }
 
+    public void SelectStatusText()
+    {
+        if(tairyoku>=80)
+        {
+            statustext = gameText.StatusText(3, 1);
+        }
+        //else if(tairyoku <80&&)
+    }
+
     public float Tairyoku()
     {
         return tairyoku;
     }
 
+    public bool FadeIn(bool fadeIn)
+    {
+        this.fadeIn = fadeIn;
+        return this.fadeIn;
+    }
+
     void Update()
     {
         rndMiniGame = Random.Range(0, rndMGLimit);
-
-        //フェードアウト関連
         if(currentstate==Gamestate.Opning)
         {
-            Debug.Log(currentstate);
-            FadeoutTextalfa -= fadetime;           
-            OpenDay.color = new Color(OpenDay.color.r, OpenDay.color.g, OpenDay.color.b, FadeoutTextalfa);            
-            if (OpenDay.color.a<=0.5f)
-            {
-                FadeoutImagealfa -= fadetime;
-                FadeOut.color = new Color(FadeOut.color.r, FadeOut.color.g, FadeOut.color.b, FadeoutImagealfa);
-                if (FadeOut.color.a <= 0)
-                {
-                    FadeoutTextalfa = 0.00f;
-                    FadeoutImagealfa = 0.00f;
-                    OpenDay.color = new Color(OpenDay.color.r, OpenDay.color.g, OpenDay.color.b, 0);
-                    FadeOut.color = new Color(FadeOut.color.r, FadeOut.color.g, FadeOut.color.b, 0);
-                    OpenDay.gameObject.SetActive(false);
-                    FadeOut.gameObject.SetActive(false);
-                    //ScneSelect(Gamestate.GamePlay);//最後にシーンを変える
-                }
-            }         
+            FadeOutImage(currentstate);
+            FadeInImage(currentstate);
         }
-        if (currentstate == Gamestate.GameEnd)
+        else if(currentstate==Gamestate.GamePlay)
         {
-            OpenDay.gameObject.SetActive(true);
-            FadeOut.gameObject.SetActive(true);
-            FadeoutImagealfa+= fadetime;
-            FadeOut.color = new Color(FadeOut.color.r, FadeOut.color.g, FadeOut.color.b, FadeoutImagealfa);
-            if (FadeOut.color.a >= 0.5f)
-            {
-                FadeoutTextalfa += fadetime;
-                OpenDay.color = new Color(OpenDay.color.r, OpenDay.color.g, OpenDay.color.b, FadeoutTextalfa);
-                if (OpenDay.color.a >= 1)
-                {
-                    FadeoutImagealfa = 1.00f;
-                    FadeoutTextalfa = 1.00f;
-                    OpenDay.color = new Color(OpenDay.color.r, OpenDay.color.g, OpenDay.color.b, FadeoutTextalfa);
-                    FadeOut.color = new Color(FadeOut.color.r, FadeOut.color.g, FadeOut.color.b, FadeoutImagealfa);
-                    foodManager.Scene();//最後にシーンを変える
-                    
-                }
-            }
+            FadeOutImage(currentstate);
+            FadeInImage(currentstate);
+        }
+        else if (currentstate == Gamestate.GameOver)
+        {
+            FadeOutImage(currentstate);
+            FadeInImage(currentstate);
+        }
 
-        }
-        if (currentstate == Gamestate.Clear)
-        {
-            //clearedLamp.gameObject.SetActive(true);
-            FadeOut.gameObject.SetActive(true);
-            FadeoutImagealfa += fadetime;
-            FadeOut.color = new Color(255, 255, 255, FadeoutImagealfa);
-            if (FadeOut.color.a >= 1.0f)
-            {
-                //FadeoutTextalfa += fadetime;
-                ////clearedLamp.color = new Color(0,0,0, FadeoutTextalfa);
-                //if (clearedLamp.color.a >= 1)
-                //{
-                    FadeoutImagealfa = 1.00f;
-                    FadeoutTextalfa = 1.00f;
-                    //clearedLamp.color = new Color(0,0,0, FadeoutTextalfa);
-                    FadeOut.color = new Color(FadeOut.color.r, FadeOut.color.g, FadeOut.color.b, FadeoutImagealfa);
-                    //ScneSelect(Gamestate.Opning);//最後にシーンを変える
-                //}
-                
-            }
-        }
     }
 
+    public void MoneyTairyokuCalcu()
+    {
+        moneys -= foodManager.Moneys();
+        tairyoku += foodManager.Tairyoku();
+        Debug.Log(moneys);
+        Debug.Log(tairyoku);
+    }
+
+    public int NextDays()
+    {
+        days++;
+        return days;
+    }
     public int ReturnForDays()
     {
         return days;

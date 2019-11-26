@@ -36,7 +36,7 @@ public class Foodscript : MonoBehaviour
     public float TairyokuCalcu()
     {
         float calcu = tairyoku;
-        tairyoku = (int)((calcu / 200)*100)+0.5f;
+        tairyoku = (int)((calcu / 200) * 100);
         return tairyoku;
     }
 
