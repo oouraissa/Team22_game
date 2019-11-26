@@ -7,6 +7,9 @@ public class FoodManager : MonoBehaviour
 {  
     public float tairyoku;
     public GameMain gameMain;
+    public Foodscript smalldrug;
+    public Foodscript leargedrug;
+    public Foodscript BigDrug;
     public int foodmoney;
     public Image byoukiImage;
     public Text Listtext;
@@ -17,6 +20,47 @@ public class FoodManager : MonoBehaviour
     private void Start()
     {
         currentByouki = new List<Byouki>();
+        smalldrug.gameObject.SetActive(false);
+        leargedrug.gameObject.SetActive(false);
+        BigDrug.gameObject.SetActive(false);
+    }
+    /// <summary>
+    /// 病気を細分化して薬によって処理
+    /// </summary>
+    public void Heal()
+    {
+        List<Byouki> smallByouki = new List<Byouki>();
+        List<Byouki> leargeByouki = new List<Byouki>();
+        List<Byouki> BigByouki = new List<Byouki>();
+        foreach (var i in currentByouki)
+        {
+            if(i.Currentstate()== Byouki.Byoukistate.風邪|| i.Currentstate() == Byouki.Byoukistate.貧血
+                || i.Currentstate() == Byouki.Byoukistate.食中毒)
+            {
+                smallByouki.Add(i);
+            }
+            else if(i.Currentstate() == Byouki.Byoukistate.肺炎)
+            {
+                leargeByouki.Add(i);
+            }
+        }
+
+        if(smalldrug.SmallCount()==true)
+        {
+            currentByouki.RemoveAt(Random.Range(0, smallByouki.Count + 1));
+            smalldrug.ResetCount();
+        }
+
+        if (leargedrug.LeargeCount() == true)
+        {
+            currentByouki.RemoveAt(Random.Range(0, leargeByouki.Count + 1));
+            leargedrug.ResetCount();
+        }
+        if(BigDrug.BigCount()==true)
+        {
+            currentByouki.RemoveAt(Random.Range(0, BigByouki.Count + 1));
+            BigDrug.ResetCount();
+        }
     }
     /// <summary>
     /// 病気をテキストに記載
@@ -80,7 +124,9 @@ public class FoodManager : MonoBehaviour
         return deathbool;
     }
 
-    
+    /// <summary>
+    /// お金と体力をリセット　
+    /// </summary>
     public void MoneyandTairyokuReset()
     {
         foodmoney = 0;
@@ -149,6 +195,7 @@ public class FoodManager : MonoBehaviour
                 RemoveByouki(Byouki.Byoukistate.肺炎);
                 Byouki haien = new Byouki(Byouki.Byoukistate.肺炎, 10,gameMain.ReturnForDays());
                 currentByouki.Add(haien);
+                leargedrug.gameObject.SetActive(true);
                 //foreach (var i in currentByouki)
                 //{
                 //    if (i.Currentstate() == Byouki.Byoukistate.肺炎)
@@ -171,6 +218,7 @@ public class FoodManager : MonoBehaviour
                 RemoveByouki(Byouki.Byoukistate.風邪);
                 Byouki kaze = new Byouki(Byouki.Byoukistate.風邪);
                 currentByouki.Add(kaze);
+                smalldrug.gameObject.SetActive(true);
                 //foreach (var i in currentByouki)
                 //{
                 //    if (i.Currentstate() == Byouki.Byoukistate.風邪)
@@ -190,6 +238,7 @@ public class FoodManager : MonoBehaviour
                 RemoveByouki(Byouki.Byoukistate.貧血);
                 Byouki hinketu = new Byouki(Byouki.Byoukistate.貧血);
                 currentByouki.Add(hinketu);
+                smalldrug.gameObject.SetActive(true);
                 //foreach (var i in currentByouki)
                 //{
                 //    if (i.Currentstate() == Byouki.Byoukistate.貧血)
@@ -212,6 +261,7 @@ public class FoodManager : MonoBehaviour
                 RemoveByouki(Byouki.Byoukistate.食中毒);
                 Byouki byouki = new Byouki(Byouki.Byoukistate.食中毒);
                 currentByouki.Add(byouki);
+                smalldrug.gameObject.SetActive(true);
                 //foreach (var i in currentByouki)
                 //{
                 //    if (i.Currentstate() == Byouki.Byoukistate.食中毒)

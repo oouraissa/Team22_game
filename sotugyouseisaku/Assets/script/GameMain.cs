@@ -78,10 +78,11 @@ public class GameMain : MonoBehaviour
         OpenDay.text = days + "日目";
         moneyText.text = "所持金：\n" + moneys + "円";
         dayText.text = days + "日目";
-        //Debug.Log("a");
+        GamePlay();
         ScneSelect(Gamestate.GamePlay);//最初はOpningに行かない
+       
     }
-    
+
     /// <summary>
     /// シーンを設定
     /// </summary>
@@ -261,7 +262,7 @@ public class GameMain : MonoBehaviour
         //buttonScript.PositionReset();
         dialytext = gameText.DialyText(Random.Range(1, 10), 1);
         eventtext = gameText.EventText(Random.Range(0, 2), 1);
-        statustext = gameText.StatusText(Random.Range(1, 4), 1);
+        statustext = SelectStatusText();
         if (days <= (100 - 7)) 
         {
             if((days % 7) == 0)
@@ -285,8 +286,15 @@ public class GameMain : MonoBehaviour
     public void GamePlay()
     {       
         Debug.Log("Loaded method GamePlay");
+        Debug.Log(dialytext + "+" + statustext);
+        Image1.text = dialytext+"\n\n"+statustext;
+        Image3.text = eventtext;
         tairyoku -= Random.Range(15, 31);
-        Image1.text = dialytext + "\n\n" + eventtext + "\n\n" + statustext;              
+        if(days%7==0)
+        {
+            moneys += 3000;
+        }
+        //Image1.text = dialytext + "\n\n" + eventtext + "\n\n" + statustext;              
     }
 
     public void GameEnd()
@@ -297,6 +305,7 @@ public class GameMain : MonoBehaviour
     public void Clear()
     {
         Debug.Log("Loaded 'Clear' method.");
+        SceneManager.LoadScene("GamePlay");
     }
 
     public void GameOver()
@@ -310,6 +319,7 @@ public class GameMain : MonoBehaviour
         Debug.Log(moneys + "と" + tairyoku);
         foodManager.MoneyandTairyokuReset();
         buttonScript.PositionReset();
+        SceneManager.LoadScene("GamePlay");
         Debug.Log("GameOver終了");
     }
 
@@ -323,13 +333,22 @@ public class GameMain : MonoBehaviour
         return currentstate;
     }
 
-    public void SelectStatusText()
+    public string SelectStatusText()
     {
         if(tairyoku>=80)
         {
+            statustext = gameText.StatusText(1, 1);
+        }
+        else if(tairyoku<=79&&tairyoku>=30)
+        {
+            statustext = gameText.StatusText(2, 1);
+        }
+        else if (tairyoku <=29)
+        {
             statustext = gameText.StatusText(3, 1);
         }
-        //else if(tairyoku <80&&)
+
+        return statustext;
     }
 
     public float Tairyoku()

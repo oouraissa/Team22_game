@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Foodscript : MonoBehaviour
 {    enum Foods
@@ -11,11 +12,19 @@ public class Foodscript : MonoBehaviour
         Been,
         Karaage,
         Ramen,
-        Bento
+        Bento,
+        SmallDrug,
+        LeargeDrug,
+        BigDrug
     }
-
+    public Button SmallDrug;
+    public Button LeargeDrug;
+    public Button BigDrug;
     private List<Foods> currentfoods = new List<Foods>();
     private int foodsick;
+    private int smallCount;
+    private int leargeCount;
+    private int bigCount;
     private int foodmoney;
     private float tairyoku;
     public void Onclick()
@@ -28,7 +37,10 @@ public class Foodscript : MonoBehaviour
             case "Been": SelectFood(Foods.Been); break;
             case "Karaage": SelectFood(Foods.Karaage); break;
             case "Ramen": SelectFood(Foods.Ramen); break;
-            case "Bento": SelectFood(Foods.Ramen); break;
+            case "Bento": SelectFood(Foods.Bento); break;
+            case "SmallDrug": SelectFood(Foods.SmallDrug); break;
+            case "LeargeDrug": SelectFood(Foods.LeargeDrug); break;
+            case "BigDrug": SelectFood(Foods.BigDrug); break;
         }       
         Debug.Log(tairyoku + "+" + foodmoney);      
     }
@@ -77,9 +89,69 @@ public class Foodscript : MonoBehaviour
                 currentfoods.Add(Foods.Bento);
                 tairyoku += 40;
                 break;
+            case Foods.SmallDrug:
+                smallCount++;
+                foodmoney += 2000;
+                tairyoku +=1;
+                currentfoods.Add(Foods.SmallDrug);
+                SmallDrug.interactable = false;
+                break;
+            case Foods.LeargeDrug:
+                leargeCount++;
+                foodmoney += 5000;
+                tairyoku += 1;
+                currentfoods.Add(Foods.LeargeDrug);
+                LeargeDrug.interactable = false;
+                break;
+            case Foods.BigDrug:
+                bigCount++;
+                foodmoney += 10000;
+                tairyoku += 1;
+                currentfoods.Add(Foods.BigDrug);
+                BigDrug.interactable = false;
+                break;
         }
         
     }
+
+    public void ResetCount()
+    {
+        smallCount = 0;
+        leargeCount = 0;
+        bigCount = 0;
+    }
+
+    public bool BigCount()
+    {
+        int a = Random.Range(10, 21);
+        if (bigCount >= a)
+        {
+            return true;
+        }
+        else
+            return false;
+    }
+    public bool LeargeCount()
+    {
+        int a = Random.Range(5, 9);
+        if (leargeCount>= a)
+        {
+            return true;
+        }
+        else
+            return false;
+    }
+
+    public bool SmallCount()
+    {
+        if (smallCount >= 3)
+        {
+            return true;
+        }
+        else
+            return false;
+    }
+
     // Start is called before the first frame update
     void Start()
     {

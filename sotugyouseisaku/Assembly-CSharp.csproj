@@ -69,6 +69,7 @@
     <Compile Include="Assets\script\GameText.cs" />
     <Compile Include="Assets\script\Keyhole.cs" />
     <Compile Include="Assets\script\Lockpick.cs" />
+    <Compile Include="Assets\script\Title.cs" />
     <Compile Include="Assets\script\TouchScript.cs" />
     <None Include="Assets\Resources\Status.txt" />
     <None Include="Assets\Resources\Byouki.txt" />
