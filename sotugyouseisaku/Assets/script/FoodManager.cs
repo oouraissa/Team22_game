@@ -15,11 +15,12 @@ public class FoodManager : MonoBehaviour
     public Text Listtext;
     public int deathday;
     private bool deathbool=false;
-    public List<Byouki> currentByouki = new List<Byouki>();
-
+    //public List<Byouki> currentByouki = new List<Byouki>();
+    public Byouki[] currentByouki = new Byouki[(int)Byouki.Byoukistate.End];
     private void Start()
     {
-        currentByouki = new List<Byouki>();
+        currentByouki = new Byouki[(int)Byouki.Byoukistate.End];
+        //Debug.Log(currentByouki.Length);
         smalldrug.gameObject.SetActive(false);
         leargedrug.gameObject.SetActive(false);
         BigDrug.gameObject.SetActive(false);
@@ -29,36 +30,41 @@ public class FoodManager : MonoBehaviour
     /// </summary>
     public void Heal()
     {
-        List<Byouki> smallByouki = new List<Byouki>();
-        List<Byouki> leargeByouki = new List<Byouki>();
-        List<Byouki> BigByouki = new List<Byouki>();
+        List<int> smallByouki = new List<int>();
+        List<int> leargeByouki = new List<int>();
+        List<int> BigByouki = new List<int>();
         foreach (var i in currentByouki)
         {
-            if(i.Currentstate()== Byouki.Byoukistate.風邪|| i.Currentstate() == Byouki.Byoukistate.貧血
-                || i.Currentstate() == Byouki.Byoukistate.食中毒)
+            if(i!=null)
             {
-                smallByouki.Add(i);
-            }
-            else if(i.Currentstate() == Byouki.Byoukistate.肺炎)
-            {
-                leargeByouki.Add(i);
-            }
+                switch (i.Currentstate())
+                {
+                    case Byouki.Byoukistate.風邪: smallByouki.Add((int)Byouki.Byoukistate.風邪);break;
+                    case Byouki.Byoukistate.貧血: smallByouki.Add((int)Byouki.Byoukistate.貧血); break;
+                    case Byouki.Byoukistate.食中毒: smallByouki.Add((int)Byouki.Byoukistate.食中毒); break;
+                    case Byouki.Byoukistate.肺炎: leargeByouki.Add((int)Byouki.Byoukistate.肺炎); break;
+                }               
+            }           
         }
-
+        Debug.Log(leargeByouki.Count);
         if(smalldrug.SmallCount()==true)
-        {
-            currentByouki.RemoveAt(Random.Range(0, smallByouki.Count + 1));
+        {         
+            int small = smallByouki[Random.Range(0, smallByouki.Count+1)];
+            currentByouki[small] = null;
             smalldrug.ResetCount();
+            Debug.Log(smallByouki.Count);
         }
 
         if (leargedrug.LeargeCount() == true)
         {
-            currentByouki.RemoveAt(Random.Range(0, leargeByouki.Count + 1));
+            int learge = Random.Range(0, leargeByouki.Count+1);
+            //currentByouki.Remove(leargeByouki[learge]);
             leargedrug.ResetCount();
         }
         if(BigDrug.BigCount()==true)
         {
-            currentByouki.RemoveAt(Random.Range(0, BigByouki.Count + 1));
+            int big = Random.Range(0, BigByouki.Count + 1);
+            //currentByouki.Remove(BigByouki[big]);
             BigDrug.ResetCount();
         }
     }
@@ -67,43 +73,54 @@ public class FoodManager : MonoBehaviour
     /// </summary>
     public void ByoukiText()
     {
-        if (currentByouki.Count == 0)
+        Listtext.text = "";
+        //string a;
+        foreach(var i in currentByouki)
         {
-            return;
-        }
-        else
-        {
-            byoukiImage.gameObject.SetActive(true);
-            foreach (var i in currentByouki)
+            if(i!=null)
             {
-                Listtext.text = i.ByoukiText() + "\n";                                             
+                byoukiImage.gameObject.SetActive(true);
+                Listtext.text += i.ByoukiText();
             }
-        }       
+        }
+
+        
+
     }
     /// <summary>
     /// 特殊な病気の組み合わせ+死亡処理
     /// </summary>
     public void SpecialDeath()
     {
-        foreach(var i in currentByouki)
+        int KHS = 0;//風邪、貧血、食中毒のカウント
+        List<Byouki> oldByouki = new List<Byouki>();
+        for(int i=0;i<currentByouki.Length;i++)
         {
-            if(i.ReturnDeathday()<=gameMain.ReturnForDays())
+            if(currentByouki[i]!=null)
+            {
+                oldByouki.Add(currentByouki[i]);
+            }
+            
+        }
+        foreach (var i in oldByouki)
+        {
+            if (i.ReturnDeathday() <= gameMain.ReturnForDays() && i.Returndeathbool() == true)
             {
                 deathbool = true;
             }
-            int KHS = 0;//風邪、貧血、食中毒のカウント
-            if(i.Currentstate()== Byouki.Byoukistate.脳卒中)
+            if (i.Currentstate() == Byouki.Byoukistate.脳卒中)
             {
                 deathbool = true;
                 //gameMain.ScneSelect(GameMain.Gamestate.GameOver);//脳卒中は絶対死
             }
-       else if(i.Currentstate() == Byouki.Byoukistate.風邪|| i.Currentstate() == Byouki.Byoukistate.貧血
-               || i.Currentstate() == Byouki.Byoukistate.食中毒)
+       else if (i.Currentstate() == Byouki.Byoukistate.風邪 || i.Currentstate() == Byouki.Byoukistate.貧血
+                    || i.Currentstate() == Byouki.Byoukistate.食中毒)
             {
                 KHS++;
-                if(KHS==3)
+                Debug.Log("KHS" + KHS);
+                if (KHS == 3)
                 {
-                    if(i.Currentstate() != Byouki.Byoukistate.風邪|| i.Currentstate() != Byouki.Byoukistate.貧血 
+                    if (i.Currentstate() != Byouki.Byoukistate.風邪 || i.Currentstate() != Byouki.Byoukistate.貧血
                         || i.Currentstate() != Byouki.Byoukistate.食中毒)
                     {
                         deathbool = true;
@@ -111,8 +128,9 @@ public class FoodManager : MonoBehaviour
                     }
                 }
             }
+           
         }
-       
+
     }
 
     /// <summary>
@@ -158,135 +176,65 @@ public class FoodManager : MonoBehaviour
         }
         return foodmoney;
     }
-    
     /// <summary>
     /// 体力によって病気になる
     /// </summary>
     public void SelectByouki()
     {       
         float currenttairyoku = gameMain.Tairyoku();
+        //List<Byouki> reset = currentByouki;      
         if (currenttairyoku<= 0)
         {
             Debug.Log("脳卒中");
-            RemoveByouki(Byouki.Byoukistate.脳卒中);
-            Byouki nousottyuu = new Byouki(Byouki.Byoukistate.脳卒中, 0, gameMain.ReturnForDays());
-            currentByouki.Add(nousottyuu);
-            //Byouki nousottyuu = GameObject.Find("Byouki").GetComponent<Byouki>();
-            //foreach (var i in currentByouki)
-            //{
-            //    Debug.Log(i);
-            //    if (i.Currentstate()==Byouki.Byoukistate.脳卒中)//病気のリストに同じ名前があったらスルー
-            //    {
-                    
-            //        return;
-                    
-            //    }
-            //    else
-            //    {
-            //        currentByouki.Add(nousottyuu);
-            //    }              
-            //}          
+           // Byouki nousottyuu = new Byouki(Byouki.Byoukistate.脳卒中, 0, gameMain.ReturnForDays());
+            currentByouki[(int)Byouki.Byoukistate.脳卒中] = new Byouki(Byouki.Byoukistate.脳卒中, 0, gameMain.ReturnForDays());
         }
-        else if(currenttairyoku>0&&currenttairyoku<=20)
+        else if (currenttairyoku > 0 && currenttairyoku <= 20)
         {
-            int random = Random.Range(1, 4);
-            if(random==1)
-            {
-                RemoveByouki(Byouki.Byoukistate.肺炎);
-                Byouki haien = new Byouki(Byouki.Byoukistate.肺炎, 10,gameMain.ReturnForDays());
-                currentByouki.Add(haien);
+            int random = Random.Range(1, 3);       
+            if (random == 1)
+            {                
+                Byouki haien = new Byouki(Byouki.Byoukistate.肺炎, 10, gameMain.ReturnForDays());
+                currentByouki[(int)Byouki.Byoukistate.肺炎] = haien;
                 leargedrug.gameObject.SetActive(true);
-                //foreach (var i in currentByouki)
-                //{
-                //    if (i.Currentstate() == Byouki.Byoukistate.肺炎)
-                //    {
-                //        return;
-                //    }
-                //    else
-                //    {
-                //        currentByouki.Add(haien);
-                //    }
-                   
-                //}
+                //reset.Add(haien);
             }
         }
-        else if(currenttairyoku > 20 && currenttairyoku <= 50)
+        else if (currenttairyoku > 20 && currenttairyoku <= 50)
         {
-            int random = Random.Range(1, 6);
-            if(random==1)
+            int random = Random.Range(1, 2);
+            if (random == 1)
             {
-                RemoveByouki(Byouki.Byoukistate.風邪);
-                Byouki kaze = new Byouki(Byouki.Byoukistate.風邪);
-                currentByouki.Add(kaze);
+                //RemoveByouki(Byouki.Byoukistate.風邪);
+               // Byouki kaze = new Byouki(Byouki.Byoukistate.風邪);
+                currentByouki[(int)Byouki.Byoukistate.風邪] = new Byouki(Byouki.Byoukistate.風邪);
                 smalldrug.gameObject.SetActive(true);
-                //foreach (var i in currentByouki)
-                //{
-                //    if (i.Currentstate() == Byouki.Byoukistate.風邪)
-                //    {
-                //        return;
-                //    }
-                //    else
-                //    {
-                //        Byouki kaze = new Byouki(Byouki.Byoukistate.風邪);
-                //        currentByouki.Add(kaze);
-                //    }
-                       
-                //}
+
             }
-            else if(random==2)
+            else if (random == 2)
             {
-                RemoveByouki(Byouki.Byoukistate.貧血);
-                Byouki hinketu = new Byouki(Byouki.Byoukistate.貧血);
-                currentByouki.Add(hinketu);
+                //RemoveByouki(Byouki.Byoukistate.貧血);
+               // Byouki hinketu = new Byouki(Byouki.Byoukistate.貧血);
+                currentByouki[(int)Byouki.Byoukistate.貧血] = new Byouki(Byouki.Byoukistate.貧血);
                 smalldrug.gameObject.SetActive(true);
-                //foreach (var i in currentByouki)
-                //{
-                //    if (i.Currentstate() == Byouki.Byoukistate.貧血)
-                //    {
-                //        return;
-                //    }
-                //    else
-                //    {
-                //        Byouki hinketu = new Byouki(Byouki.Byoukistate.貧血);
-                //        currentByouki.Add(hinketu);
-                //    }
-                //}
             }
         }
-        else if(currenttairyoku>50&&foodmoney!=0)
+        else if (currenttairyoku > 50 && foodmoney != 0)
         {
             int random = Random.Range(1, 11);
             if (random == 1)
             {
-                RemoveByouki(Byouki.Byoukistate.食中毒);
-                Byouki byouki = new Byouki(Byouki.Byoukistate.食中毒);
-                currentByouki.Add(byouki);
+                //RemoveByouki(Byouki.Byoukistate.食中毒);
+                //Byouki byouki = new Byouki(Byouki.Byoukistate.食中毒);
+                currentByouki[(int)Byouki.Byoukistate.食中毒] = new Byouki(Byouki.Byoukistate.食中毒);
                 smalldrug.gameObject.SetActive(true);
-                //foreach (var i in currentByouki)
-                //{
-                //    if (i.Currentstate() == Byouki.Byoukistate.食中毒)
-                //    {
-                //        return;
-                //    }
-                //    else
-                //    {
-                //        Byouki shokutyudoku = new Byouki(Byouki.Byoukistate.食中毒);
-                //        currentByouki.Add(shokutyudoku);
-                //    }
-                //}
+
             }
         }
+
+        Heal();
     }
 
-    public void RemoveByouki(Byouki.Byoukistate removestate)
-    {
-        foreach(var i in currentByouki)
-        {
-            if(i.Currentstate()==removestate)
-            {
-                currentByouki.Remove(i);
-            }
-        }
-    }
+   
 
 }

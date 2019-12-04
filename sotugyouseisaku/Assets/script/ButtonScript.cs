@@ -51,9 +51,9 @@ public class ButtonScript : MonoBehaviour
     public void OnClick4()
     {
         if(gameMain.Gamestates()==GameMain.Gamestate.Opning)
-        {           
-            gameMain.FadeIn(true);
+        {
             gameMain.GamePlay();
+            gameMain.FadeIn(true);           
             //gameMain.ScneSelect(GameMain.Gamestate.GamePlay);
 
             firstImages = true;
@@ -93,24 +93,30 @@ public class ButtonScript : MonoBehaviour
             case 1:               
                 if(lastClick&&gameMain.Gamestates()==GameMain.Gamestate.GamePlay)
                 {
+                    Debug.Log("うんこ");
                     gameMain.MoneyTairyokuCalcu();
                     foodManager.SelectByouki();
+                    //foodManager.Heal();
                     foodManager.ByoukiText();
                     foodManager.SpecialDeath();
                     if (foodManager.Deathbool() == true)
                     {
+                        //foodManager.ByoukiText();
                         gameMain.GameOver();
                         gameMain.FadeIn(true);
+                        
                     }
                     else
                     {
+                        //foodManager.Heal();
+                        
                         gameMain.Opning();
                         gameMain.FadeIn(true);
-                    }                   
-                    
+                        
+                    }
                     lastClick = false;
                     changetime = true;
-                }
+                }               
                 else
                 novelspeed = -1; Debug.Log("Burton1終了"); break;
             case 2: 

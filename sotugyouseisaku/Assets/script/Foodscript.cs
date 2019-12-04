@@ -134,7 +134,7 @@ public class Foodscript : MonoBehaviour
     public bool LeargeCount()
     {
         int a = Random.Range(5, 9);
-        if (leargeCount>= a)
+        if (leargeCount>= 1)
         {
             return true;
         }
@@ -144,7 +144,7 @@ public class Foodscript : MonoBehaviour
 
     public bool SmallCount()
     {
-        if (smallCount >= 3)
+        if (smallCount >= 1)
         {
             return true;
         }

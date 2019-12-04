@@ -15,20 +15,22 @@ public class Byouki /*: MonoBehaviour*/
         栄養失調,
         ガン,
         肺炎,
-        脳卒中
+        脳卒中,
+        End
     }
 
     Byoukistate currentstate;
     private int Deathday;
     public GameMain gameMain;
     public bool deathbool;//要らないかも
-    private int daynow;
+    private int ID;
 
     public Byouki(Byoukistate state,int deathday,int daynow)
     {
         this.currentstate = state;
+        //this.ID=Byoukistate.
         this.Deathday = daynow+ deathday;//現在の日にち+deathdayで死亡
-        deathbool = true;
+        this.deathbool = true;
     }
 
     /// <summary>
@@ -50,7 +52,12 @@ public class Byouki /*: MonoBehaviour*/
         return Deathday;
     }
 
-    
+    public bool Returndeathbool()
+    {
+        return deathbool;
+    }
+
+
 
     public Byoukistate Currentstate()
     {
@@ -59,7 +66,7 @@ public class Byouki /*: MonoBehaviour*/
 
     public string ByoukiText()
     {
-        return currentstate.ToString();
+        return "\n"+this.currentstate.ToString()+"\n";
     }
 
     // Start is called before the first frame update

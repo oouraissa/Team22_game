@@ -66,7 +66,7 @@ public class GameMain : MonoBehaviour
         rndMiniGame = 0;
         moneys = 30000;
         health = 50;
-        tairyoku = 50;
+        tairyoku = 64;
         OpenDay.color = new Color(OpenDay.color.r, OpenDay.color.g, OpenDay.color.b, 0);
         FadeOut.color = new Color(FadeOut.color.r, FadeOut.color.g, FadeOut.color.b, 0);
         OpenDay.gameObject.SetActive(false);
@@ -125,6 +125,7 @@ public class GameMain : MonoBehaviour
             case GameMain.Gamestate.Opning://フェードイン(画像のみ)
                 if(fadeIn)
                 {
+                    Debug.Log("Opningフェードイン");
                     FadeOut.gameObject.SetActive(true);
                     FadeoutImagealfa += fadetime;
                     FadeOut.color = new Color(FadeOut.color.r, FadeOut.color.g, FadeOut.color.b, FadeoutImagealfa);
@@ -239,7 +240,7 @@ public class GameMain : MonoBehaviour
                         FadeoutImagealfa = 0.00f;
                         FadeOut.color = new Color(FadeOut.color.r, FadeOut.color.g, FadeOut.color.b, 0);
                         FadeOut.gameObject.SetActive(false);
-                       
+                        //ScneSelect(Gamestate.GamePlay);
                     }                  
                 }
                 break;
@@ -319,7 +320,7 @@ public class GameMain : MonoBehaviour
         Debug.Log(moneys + "と" + tairyoku);
         foodManager.MoneyandTairyokuReset();
         buttonScript.PositionReset();
-        SceneManager.LoadScene("GamePlay");
+        //SceneManager.LoadScene("GamePlay");
         Debug.Log("GameOver終了");
     }
 
