@@ -14,6 +14,7 @@ public class ButtonScript : MonoBehaviour
     public Image fadeImage;
     public Text button2;
     public GameMain gameMain;
+    public Fade fade;
     public FoodManager foodManager;
     public float novelspeed;
     private bool firstClick;
@@ -50,11 +51,12 @@ public class ButtonScript : MonoBehaviour
 
     public void OnClick4()
     {
-        if(gameMain.Gamestates()==GameMain.Gamestate.Opning)
+        if(fade.Gamestates()==Fade.Gamestate.Opning)
         {
             gameMain.GamePlay();
-            gameMain.FadeIn(true);           
-            //gameMain.ScneSelect(GameMain.Gamestate.GamePlay);
+            Imagesposition.SetActive(true);
+            fade.FadeIn(true);           
+            //fade.ScneSelect(Fade.Gamestate.GamePlay);
 
             firstImages = true;
 
@@ -69,7 +71,7 @@ public class ButtonScript : MonoBehaviour
 
             if (gameMain.ReturnForDays() == 100)
             {
-                gameMain.currentstate = GameMain.Gamestate.Clear;
+                fade.currentstate = Fade.Gamestate.Clear;
             }
         }
            
@@ -91,34 +93,32 @@ public class ButtonScript : MonoBehaviour
         switch (page)
         {
             case 1:               
-                if(lastClick&&gameMain.Gamestates()==GameMain.Gamestate.GamePlay)
+                if(lastClick&&fade.Gamestates()==Fade.Gamestate.GamePlay)
                 {
-                    Debug.Log("うんこ");
-                    gameMain.MoneyTairyokuCalcu();
+                    Debug.Log("うんこ");                   
                     foodManager.SelectByouki();
-                    //foodManager.Heal();
                     foodManager.ByoukiText();
                     foodManager.SpecialDeath();
+                    fade.FadeIn(true);
                     if (foodManager.Deathbool() == true)
                     {
                         //foodManager.ByoukiText();
                         gameMain.GameOver();
-                        gameMain.FadeIn(true);
-                        
+                        //fade.FadeIn(true);                        
                     }
                     else
                     {
-                        //foodManager.Heal();
-                        
+                        //foodManager.Heal();                       
                         gameMain.Opning();
-                        gameMain.FadeIn(true);
-                        
+                        Imagesposition.SetActive(false);
+                        foodManager.ResetFoodselect();
+                        //fade.FadeIn(true);                       
                     }
                     lastClick = false;
                     changetime = true;
                 }               
                 else
-                novelspeed = -1; Debug.Log("Burton1終了"); break;
+               novelspeed = -1; /*Debug.Log("Burton1終了");*/break;
             case 2: 
                 if(firstClick)
                 {
@@ -141,9 +141,9 @@ public class ButtonScript : MonoBehaviour
     {
         for (int a = 0; a < Images.Length; a++)
         {
-            Images[a].transform.position = new Vector2(12, Imagesposition.transform.position.y);
+            Images[a].transform.position = new Vector2(15, Imagesposition.transform.position.y);
         }
-        Imagesposition.transform.position= new Vector2(12, Imagesposition.transform.position.y);
+        Imagesposition.transform.position= new Vector2(15, Imagesposition.transform.position.y);
         //StartCoroutine("ButtonStop");
         Imagenumber = 0;
     }
@@ -185,11 +185,11 @@ public class ButtonScript : MonoBehaviour
            
         //}
 
-        if(gameMain.currentstate==GameMain.Gamestate.GamePlay&&Imagenumber==2)
+        if(fade.currentstate==Fade.Gamestate.GamePlay&&Imagenumber==2)
         {
             button2.text = "晩酌してねる";
         }
-        else if(gameMain.currentstate == GameMain.Gamestate.Opning && Imagenumber == 2)
+        else if(fade.currentstate == Fade.Gamestate.Opning && Imagenumber == 2)
         {
             button2.text = "会社に行かねば";
         }
@@ -200,9 +200,9 @@ public class ButtonScript : MonoBehaviour
 
         if(firstImages!=true)
         {
-            if (Images[Imagenumber].transform.position.x <= -11)
+            if (Images[Imagenumber].transform.position.x <= -15.1)
             {
-                Images[Imagenumber].transform.position = new Vector2(-10, 0);
+                Images[Imagenumber].transform.position = new Vector2(-15, Images[Imagenumber].transform.position.y);
                 novelspeed = 0;
                 Imagenumber++;
                 if (Imagenumber > 2)
@@ -210,16 +210,16 @@ public class ButtonScript : MonoBehaviour
                     Imagenumber = 2;
                 }
             }
-            else if (Images[Imagenumber].transform.position.x >= 1)
+            else if (Images[Imagenumber].transform.position.x >= 0.1)
             {
                 //Debug.Log("a");
                 Imagesposition.transform.position = new Vector2(0, Imagesposition.transform.position.y);
-                Images[Imagenumber].transform.position = new Vector2(0, 0);
+                Images[Imagenumber].transform.position = new Vector2(0, Images[Imagenumber].transform.position.y);
                 Imagesspeed = 0;
                 novelspeed = 0;
             }
             Images[Imagenumber].transform.position =
-                new Vector2(Images[Imagenumber].transform.position.x + novelspeed, 0);
+                new Vector2(Images[Imagenumber].transform.position.x + novelspeed, Images[Imagenumber].transform.position.y);
         }
 
         //Image３ならラストクリックをtrueに
@@ -242,15 +242,15 @@ public class ButtonScript : MonoBehaviour
         Imagesposition.transform.position = new Vector2(Imagesposition.transform.position.x + Imagesspeed,
             Imagesposition.transform.position.y);
 
-        if (Imagesposition.transform.position.x <= -1)
+        if (Imagesposition.transform.position.x <= -0.1)
         {
             //Debug.Log("a");
-            Imagesposition.transform.position = new Vector2(0, Imagesposition.transform.position.y);
+            Imagesposition.transform.position = new Vector2(0f, Imagesposition.transform.position.y);
             Imagesspeed = 0;
         }
-        if (Imagesposition.transform.position.x >= 11)
+        if (Imagesposition.transform.position.x >= 12.1f)
         {
-            Imagesposition.transform.position = new Vector2(10, Imagesposition.transform.position.y);
+            Imagesposition.transform.position = new Vector2(12f, Imagesposition.transform.position.y);
             Imagesspeed = 0;
         }
 

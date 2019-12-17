@@ -4,13 +4,13 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class Foodscript : MonoBehaviour
-{    enum Foods
+{    enum  Foods
     {
         Beer,
         Ryokutya,
         StrongZero,
         Been,
-        Karaage,
+        Steak,
         Ramen,
         Bento,
         SmallDrug,
@@ -20,6 +20,16 @@ public class Foodscript : MonoBehaviour
     public Button SmallDrug;
     public Button LeargeDrug;
     public Button BigDrug;
+    public Button Beer;
+    public Button Ryokutya;
+    public Button StrongZero;
+    public Button Been;
+    public Button Steak;
+    public Button Ramen;
+    public Button Bento;
+
+   
+   
     private List<Foods> currentfoods = new List<Foods>();
     private int foodsick;
     private int smallCount;
@@ -35,7 +45,7 @@ public class Foodscript : MonoBehaviour
             case "Ryokutya": SelectFood(Foods.Ryokutya); break;
             case "StrongZero": SelectFood(Foods.StrongZero); break;
             case "Been": SelectFood(Foods.Been); break;
-            case "Karaage": SelectFood(Foods.Karaage); break;
+            case "Steak": SelectFood(Foods.Steak); break;
             case "Ramen": SelectFood(Foods.Ramen); break;
             case "Bento": SelectFood(Foods.Bento); break;
             case "SmallDrug": SelectFood(Foods.SmallDrug); break;
@@ -64,47 +74,61 @@ public class Foodscript : MonoBehaviour
             case Foods.Beer:
                 currentfoods.Add(Foods.Beer);
                 tairyoku += 20;
-                foodmoney += 300;break;
+                foodmoney += 300;
+                Beer.interactable = false;
+                break;
             case Foods.Ryokutya:
                 currentfoods.Add(Foods.Ryokutya);
                 tairyoku += 5;
-                foodmoney += 160; break;
+                foodmoney += 160;
+                Ryokutya.interactable = false;
+                break;
             case Foods.StrongZero:
                 currentfoods.Add(Foods.StrongZero);
                 tairyoku += 15;
-                foodmoney += 150; break;
+                foodmoney += 150;
+                StrongZero.interactable = false;
+                break;
             case Foods.Been:
                 currentfoods.Add(Foods.Been);
                 tairyoku += 2;
-                foodmoney += 100; break;
-            case Foods.Karaage:
-                currentfoods.Add(Foods.Karaage);
-                tairyoku += 20;
-                foodmoney += 500; break;
+                foodmoney += 100;
+                Been.interactable = false;
+                break;
+            case Foods.Steak:
+                currentfoods.Add(Foods.Steak);
+                tairyoku += 40;
+                foodmoney += 2000;
+                Steak.interactable = false;
+                break;
             case Foods.Ramen:
                 currentfoods.Add(Foods.Ramen);
-                tairyoku += 30;
-                foodmoney += 650; break;
+                tairyoku += 20;
+                foodmoney += 650;
+                Ramen.interactable = false;
+                break;            
             case Foods.Bento:
                 currentfoods.Add(Foods.Bento);
                 tairyoku += 40;
+                foodmoney += 0;
+                Bento.interactable = false;
                 break;
             case Foods.SmallDrug:
-                smallCount++;
+                this.smallCount++;
                 foodmoney += 2000;
                 tairyoku +=1;
                 currentfoods.Add(Foods.SmallDrug);
                 SmallDrug.interactable = false;
                 break;
             case Foods.LeargeDrug:
-                leargeCount++;
+                this.leargeCount++;
                 foodmoney += 5000;
                 tairyoku += 1;
                 currentfoods.Add(Foods.LeargeDrug);
                 LeargeDrug.interactable = false;
                 break;
             case Foods.BigDrug:
-                bigCount++;
+                this.bigCount++;
                 foodmoney += 10000;
                 tairyoku += 1;
                 currentfoods.Add(Foods.BigDrug);
@@ -114,6 +138,12 @@ public class Foodscript : MonoBehaviour
         
     }
 
+    public void Resetselect()
+    {
+       
+       
+        
+    }
     public void ResetCount()
     {
         smallCount = 0;
@@ -144,7 +174,8 @@ public class Foodscript : MonoBehaviour
 
     public bool SmallCount()
     {
-        if (smallCount >= 1)
+        //Debug.Log(smallCount);
+        if (smallCount >= 3)
         {
             return true;
         }
@@ -161,6 +192,6 @@ public class Foodscript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+       
     }
 }

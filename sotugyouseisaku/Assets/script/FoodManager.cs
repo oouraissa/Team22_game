@@ -15,6 +15,7 @@ public class FoodManager : MonoBehaviour
     public Text Listtext;
     public int deathday;
     private bool deathbool=false;
+    public List<Button> buttos;
     //public List<Byouki> currentByouki = new List<Byouki>();
     public Byouki[] currentByouki = new Byouki[(int)Byouki.Byoukistate.End];
     private void Start()
@@ -29,10 +30,13 @@ public class FoodManager : MonoBehaviour
     /// 病気を細分化して薬によって処理
     /// </summary>
     public void Heal()
-    {
+    {       
         List<int> smallByouki = new List<int>();
         List<int> leargeByouki = new List<int>();
         List<int> BigByouki = new List<int>();
+        //Debug.Log(smalldrug.SmallCount());
+        //Debug.Log(leargedrug.SmallCount());
+        //Debug.Log(BigDrug.SmallCount());
         foreach (var i in currentByouki)
         {
             if(i!=null)
@@ -46,13 +50,13 @@ public class FoodManager : MonoBehaviour
                 }               
             }           
         }
-        Debug.Log(leargeByouki.Count);
+        //Debug.Log(leargeByouki.Count);
         if(smalldrug.SmallCount()==true)
         {         
             int small = smallByouki[Random.Range(0, smallByouki.Count+1)];
             currentByouki[small] = null;
             smalldrug.ResetCount();
-            Debug.Log(smallByouki.Count);
+            //Debug.Log(smallByouki.Count);
         }
 
         if (leargedrug.LeargeCount() == true)
@@ -67,6 +71,11 @@ public class FoodManager : MonoBehaviour
             //currentByouki.Remove(BigByouki[big]);
             BigDrug.ResetCount();
         }
+
+        if(smallByouki.Count==0&&leargeByouki.Count==0&&BigByouki.Count==0)
+        {
+            byoukiImage.gameObject.SetActive(false);
+        }
     }
     /// <summary>
     /// 病気をテキストに記載
@@ -77,6 +86,7 @@ public class FoodManager : MonoBehaviour
         //string a;
         foreach(var i in currentByouki)
         {
+            
             if(i!=null)
             {
                 byoukiImage.gameObject.SetActive(true);
@@ -117,7 +127,7 @@ public class FoodManager : MonoBehaviour
                     || i.Currentstate() == Byouki.Byoukistate.食中毒)
             {
                 KHS++;
-                Debug.Log("KHS" + KHS);
+                //Debug.Log("KHS" + KHS);
                 if (KHS == 3)
                 {
                     if (i.Currentstate() != Byouki.Byoukistate.風邪 || i.Currentstate() != Byouki.Byoukistate.貧血
@@ -164,6 +174,17 @@ public class FoodManager : MonoBehaviour
         return tairyoku;
     }
 
+    public void ResetFoodselect()
+    {
+        tairyoku = 0;
+        foodmoney = 0;
+        foreach (var b in buttos)
+        {           
+             b.interactable = true;           
+        }
+
+    }
+
     /// <summary>
     /// 食べ物の値段
     /// </summary>
@@ -172,6 +193,7 @@ public class FoodManager : MonoBehaviour
     {
         foreach (Transform i in transform)
         {
+           
             foodmoney += i.gameObject.GetComponent<Foodscript>().SelectFood();
         }
         return foodmoney;

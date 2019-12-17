@@ -62,6 +62,9 @@
   <ItemGroup>
     <Compile Include="Assets\script\ButtonScript.cs" />
     <Compile Include="Assets\script\Byouki.cs" />
+    <Compile Include="Assets\script\EventManager.cs" />
+    <Compile Include="Assets\script\EventScript.cs" />
+    <Compile Include="Assets\script\Fade.cs" />
     <Compile Include="Assets\script\FoodManager.cs" />
     <Compile Include="Assets\script\Foodscript.cs" />
     <Compile Include="Assets\script\GameMain.cs" />

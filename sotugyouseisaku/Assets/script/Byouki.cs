@@ -57,8 +57,6 @@ public class Byouki /*: MonoBehaviour*/
         return deathbool;
     }
 
-
-
     public Byoukistate Currentstate()
     {
         return currentstate;
