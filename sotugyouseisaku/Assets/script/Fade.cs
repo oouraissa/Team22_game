@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class Fade : MonoBehaviour
 {
@@ -133,6 +134,22 @@ public class Fade : MonoBehaviour
                             fadeIn = false;
 
                         }
+                    }
+                }
+                break;
+            case Gamestate.GameOver:
+                if (fadeIn)
+                {
+                    FadeOut.gameObject.SetActive(true);
+                    FadeoutImagealfa += fadetime;
+                    FadeOut.color = new Color(FadeOut.color.r, FadeOut.color.g, FadeOut.color.b, FadeoutImagealfa);
+                    if (FadeOut.color.a >= 1.0f)
+                    {
+                        FadeoutImagealfa = 1.00f;
+                        FadeOut.color = new Color(FadeOut.color.r, FadeOut.color.g, FadeOut.color.b, 1);
+                        SceneManager.LoadScene("Title");
+                        fadeIn = false;
+                        Debug.Log("ゲームオーバーフェードイン");
                     }
                 }
                 break;

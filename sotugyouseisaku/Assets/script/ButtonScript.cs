@@ -13,6 +13,8 @@ public class ButtonScript : MonoBehaviour
     public Text OpenDay;
     public Image fadeImage;
     public Text button2;
+    public Text button4text;
+    public Button button4;
     public GameMain gameMain;
     public Fade fade;
     public FoodManager foodManager;
@@ -73,6 +75,12 @@ public class ButtonScript : MonoBehaviour
             {
                 fade.currentstate = Fade.Gamestate.Clear;
             }
+            button4.gameObject.SetActive(false);
+        }
+        if(fade.Gamestates()==Fade.Gamestate.GameOver)
+        {
+           
+            fade.FadeIn(true);
         }
            
     }
@@ -95,7 +103,7 @@ public class ButtonScript : MonoBehaviour
             case 1:               
                 if(lastClick&&fade.Gamestates()==Fade.Gamestate.GamePlay)
                 {
-                    Debug.Log("うんこ");                   
+                             
                     foodManager.SelectByouki();
                     foodManager.ByoukiText();
                     foodManager.SpecialDeath();
@@ -110,6 +118,7 @@ public class ButtonScript : MonoBehaviour
                     {
                         //foodManager.Heal();                       
                         gameMain.Opning();
+                        button4.gameObject.SetActive(true);
                         Imagesposition.SetActive(false);
                         foodManager.ResetFoodselect();
                         //fade.FadeIn(true);                       
@@ -192,6 +201,12 @@ public class ButtonScript : MonoBehaviour
         else if(fade.currentstate == Fade.Gamestate.Opning && Imagenumber == 2)
         {
             button2.text = "会社に行かねば";
+        }
+        else if(fade.currentstate == Fade.Gamestate.GameOver)
+        {
+            button4.gameObject.SetActive(true);
+            Imagesposition.SetActive(false);
+            button4text.text = "タイトルへ…";
         }
         else
         {

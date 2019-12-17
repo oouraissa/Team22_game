@@ -3439,6 +3439,8 @@ MonoBehaviour:
   OpenDay: {fileID: 607724890}
   fadeImage: {fileID: 589153768}
   button2: {fileID: 66787399}
+  button4text: {fileID: 719345704}
+  button4: {fileID: 285684272}
   gameMain: {fileID: 31103715}
   fade: {fileID: 1321378556}
   foodManager: {fileID: 1751647103}
