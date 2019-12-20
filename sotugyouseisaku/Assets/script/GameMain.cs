@@ -42,7 +42,7 @@ public class GameMain : MonoBehaviour
 
     private void Start()
     {
-        fade.FadeStart();
+        
         fadeIn = false;
        
         pickingFlag = false;//I dont get it how work
@@ -68,6 +68,7 @@ public class GameMain : MonoBehaviour
     {
         days++;
         eventManager.EventOpning();
+        dialytext = eventManager.StutusText() + gameText.DialyText(Random.Range(4, 10), 1);
         MoneyTairyokuCalcu();
         fade.FadeOpnig();
         moneyText.text = "所持金：\n" + moneys + "円";
@@ -78,7 +79,7 @@ public class GameMain : MonoBehaviour
         Debug.Log($"'Days' has increased: {days} days");
         Debug.Log("Loaded method Opening");
         //buttonScript.PositionReset();
-        dialytext =eventManager.StutusText() +gameText.DialyText(Random.Range(4, 10), 1);
+        
 
         Kyuuryou();
 
@@ -154,15 +155,15 @@ public class GameMain : MonoBehaviour
         
         if(tairyoku>=80)
         {
-            statustext += gameText.StatusText(1, 1);
+            statustext = gameText.StatusText(1, 1);
         }
         else if(tairyoku<=79&&tairyoku>=30)
         {
-            statustext += gameText.StatusText(2, 1);
+            statustext = gameText.StatusText(2, 1);
         }
         else if (tairyoku <=29)
         {
-            statustext += gameText.StatusText(3, 1);
+            statustext = gameText.StatusText(3, 1);
         }
 
         

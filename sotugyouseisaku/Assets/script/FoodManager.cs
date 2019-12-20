@@ -224,7 +224,7 @@ public class FoodManager : MonoBehaviour
         }
         else if (currenttairyoku > 20 && currenttairyoku <= 50)
         {
-            int random = Random.Range(1, 2);
+            int random = Random.Range(1, 5);
             if (random == 1)
             {
                 //RemoveByouki(Byouki.Byoukistate.風邪);

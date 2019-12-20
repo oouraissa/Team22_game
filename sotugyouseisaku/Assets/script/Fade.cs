@@ -16,6 +16,8 @@ public class Fade : MonoBehaviour
         GameOver
     }
     public bool fadeIn;//フェードインの切り替え
+    public AudioClip closedoor;
+    AudioSource audioSource;
     public GameMain gameMain;
     public FoodManager foodManager;
     public Gamestate currentstate;//現在のシーン
@@ -26,8 +28,9 @@ public class Fade : MonoBehaviour
 
     public Text OpenDay;
 
-    public void FadeStart()
+    public void Start()
     {
+        audioSource = GetComponent<AudioSource>();
         FadeoutImagealfa = 0.0f;
         fadetime = 0.01f;
         OpenDay.color = new Color(OpenDay.color.r, OpenDay.color.g, OpenDay.color.b, 0);
@@ -50,6 +53,8 @@ public class Fade : MonoBehaviour
         FadeOut.gameObject.SetActive(true);
         OpenDay.text = "死 ん だ";
     }
+
+    //public void 
     /// <summary>
     /// シーンを設定
     /// </summary>
@@ -100,6 +105,7 @@ public class Fade : MonoBehaviour
                         FadeoutImagealfa = 1.00f;
                         FadeOut.color = new Color(FadeOut.color.r, FadeOut.color.g, FadeOut.color.b, 1);
                         ScneSelect(Gamestate.GamePlay);
+                        audioSource.PlayOneShot(closedoor);
                         fadeIn = false;
                         Debug.Log("Opningフェードイン");
                     }
@@ -153,6 +159,11 @@ public class Fade : MonoBehaviour
                     }
                 }
                 break;
+            //case Gamestate.Clear:
+            //    if(fadeIn)
+            //    {
+
+            //    }
         }
 
     }
@@ -220,7 +231,7 @@ public class Fade : MonoBehaviour
             case Gamestate.GamePlay:///シーンの始まりにフェードアウト
                 if (FadeOut.gameObject.activeSelf == true && fadeIn == false)
                 {
-                    
+                   
                     FadeoutImagealfa -= fadetime;
                     FadeOut.color = new Color(FadeOut.color.r, FadeOut.color.g, FadeOut.color.b, FadeoutImagealfa);
                     if (FadeOut.color.a <= 0)
@@ -266,10 +277,7 @@ public class Fade : MonoBehaviour
         return currentstate;
     }
     // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    
 
     // Update is called once per frame
     void Update()

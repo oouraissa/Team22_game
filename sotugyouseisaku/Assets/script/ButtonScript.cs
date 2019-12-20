@@ -10,8 +10,9 @@ public class ButtonScript : MonoBehaviour
     public GameObject Image;
     public GameObject Image2;
     public GameObject Image3;
+    public AudioClip page;
+    public AudioClip opendoor;
     public Text OpenDay;
-    public Image fadeImage;
     public Text button2;
     public Text button4text;
     public Button button4;
@@ -26,21 +27,24 @@ public class ButtonScript : MonoBehaviour
     
     private int Imagenumber;
     private float Imagesspeed;
-    private float FadeoutImagealfa;
-    
+
+    AudioSource audioSource;
     private GameObject[]Images = new GameObject[3];
+
+   
     public void OnClick()
     {        
         if(changetime==false)
         {
             Pageselect(1);
+            audioSource.PlayOneShot(page);
         }
     }
 
     public void OncClick2()
     {
         Pageselect(2);
-        
+        audioSource.PlayOneShot(page);
     }
 
     public void OnClick3()
@@ -57,9 +61,9 @@ public class ButtonScript : MonoBehaviour
         {
             gameMain.GamePlay();
             Imagesposition.SetActive(true);
-            fade.FadeIn(true);           
+            fade.FadeIn(true);
+            audioSource.PlayOneShot(opendoor);
             //fade.ScneSelect(Fade.Gamestate.GamePlay);
-
             firstImages = true;
 
             if (gameMain.ReturnForGMiniLeft() > 0)
@@ -71,9 +75,10 @@ public class ButtonScript : MonoBehaviour
                     gameMain.MiniGame();
             }
 
-            if (gameMain.ReturnForDays() == 100)
+            if (gameMain.ReturnForDays() >= 100)
             {
                 fade.currentstate = Fade.Gamestate.Clear;
+                fade.FadeIn(true);
             }
             button4.gameObject.SetActive(false);
         }
@@ -165,7 +170,7 @@ public class ButtonScript : MonoBehaviour
     {
         Imagenumber = 0;
         novelspeed = 0;
-        
+        audioSource = GetComponent<AudioSource>();
         changetime = false;
         firstImages = true;
         firstClick = true;

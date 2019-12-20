@@ -6,7 +6,9 @@ using UnityEngine.UI;
 public class EventManager : MonoBehaviour
 {
     public int dayincIdence = 0;
-    private int downMoney = 0;
+    private int downMoney = 0;//払うお金の合計
+    private int firstMoney = 0;//加入時に払うためのお金の数値
+    private int continued = 0;//継続的に払うお金
     private int upMoney = 0;
     private float downTairyoku = 0;
     public Text eventText;
@@ -82,6 +84,13 @@ public class EventManager : MonoBehaviour
                 eventText.text = GameObject.Find("GameText").GetComponent<GameText>().EventText(8, 1);
                 DouguCheck(EventScript.Item.Fireinsurance);
                 break;//火災イベント
+            case EventScript.Disaster.Earthquake:
+                this.disaster = true;
+                Debug.Log("地震イベント");
+                eventText.text = GameObject.Find("GameText").GetComponent<GameText>().EventText(10, 1);
+                DouguCheck(EventScript.Item.Earthquakeinsurance);
+                break;//火災イベント
+
         }
     }
 
@@ -211,9 +220,9 @@ public class EventManager : MonoBehaviour
                 eventScripts[(int)currentevent] = new EventScript(currentevent);//ここでアイテムを取得 
                 switch(currentevent)
                 {
-                    case EventScript.Item.Stock:downMoney += 10000;break;
-                    case EventScript.Item.Earthquakeinsurance:downMoney += 10000;break;
-                    case EventScript.Item.Fireinsurance:downMoney += 10000;break;
+                    case EventScript.Item.Stock:firstMoney += 15000;break;
+                    case EventScript.Item.Earthquakeinsurance:firstMoney += 10000;break;
+                    case EventScript.Item.Fireinsurance:firstMoney += 10000;break;
 
                 }
             }            
@@ -266,6 +275,8 @@ public class EventManager : MonoBehaviour
     /// <returns></returns>
     public int MainMoney()
     {
+        downMoney += firstMoney;
+        firstMoney = 0;
         Debug.Log("払うお金"+downMoney+"+"+"貰うお金"+upMoney);
         return downMoney -upMoney;
     }
@@ -273,9 +284,23 @@ public class EventManager : MonoBehaviour
     public string StutusText()
     {
         string stutusText = "";
-        if(downMoney!=0)
+        if(firstMoney!=0)
         {
-            stutusText += gameText.StatusText(11, 1) + downMoney + gameText.StatusText(7, 1) + "\n\n";
+            for(int i=0;i<(int) EventScript.Item.END;i++)
+            {
+                if(eventScripts[i]!=null)
+                {
+                    Debug.Log(eventScripts[i]);
+                    switch (eventScripts[i].Itemname())
+                    {
+                        case EventScript.Item.Stock: stutusText += gameText.StatusText(6, 1) + firstMoney + gameText.StatusText(7, 1) + "\n\n"; break;
+                        case EventScript.Item.Fireinsurance: stutusText += gameText.StatusText(5, 1) + firstMoney + gameText.StatusText(7, 1) + "\n\n"; break;
+                        case EventScript.Item.Earthquakeinsurance: stutusText += gameText.StatusText(4, 1) + firstMoney + gameText.StatusText(7, 1) + "\n\n"; break;
+                    }
+                }
+            }
+                   
+                        
         }
 
         if(upMoney!=0)
@@ -283,7 +308,10 @@ public class EventManager : MonoBehaviour
             stutusText += gameText.StatusText(10, 1) + upMoney + gameText.StatusText(9, 1) + "\n\n";
         }
        
-        
+        if(downMoney!=0)
+        {
+            stutusText += gameText.StatusText(11, 1) + downMoney + gameText.StatusText(7, 1) + "\n\n";
+        }
         //foreach (var i in eventScripts)
         //{
 
@@ -328,17 +356,18 @@ public class EventManager : MonoBehaviour
         Debug.Log("イベントカウント"+dayincIdence);
         if (dayincIdence<3&&eventlimit==false)
         {
-            int a = Random.Range(1, 13);
+            int a = Random.Range(5, 6);
             switch (a)
             {
                 case 1: Eventinsidence(EventScript.Item.Stock); eventlimit = true; break;
                 case 2: Eventinsidence(EventScript.Item.Fireinsurance); eventlimit = true; break;
                 case 3: Eventinsidence(EventScript.Item.Earthquakeinsurance); eventlimit = true; break;
                 case 4: Disasterinsidence(EventScript.Disaster.Fire); eventlimit = true; break;
+                case 5: Disasterinsidence(EventScript.Disaster.Earthquake); eventlimit = true; break;
             }
-            if(a>=5)
+            if(a>=6)
             {
-                Eventinsidence(EventScript.Item.Other); eventlimit = true;
+                Eventinsidence(EventScript.Item.Other); 
             }
         }
         else if (dayincIdence >= 3)
@@ -383,6 +412,7 @@ public class EventManager : MonoBehaviour
         stocksell = false;
         maru.gameObject.SetActive(false);
         batu.gameObject.SetActive(false);
+        dougu.gameObject.SetActive(false);
         currentdisaster = EventScript.Disaster.End;
         currentevent = EventScript.Item.END;
     }
