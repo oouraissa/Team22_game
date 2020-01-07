@@ -69,7 +69,7 @@ public class GameMain : MonoBehaviour
         days++;
         eventManager.EventOpning();
         dialytext = eventManager.StutusText() + gameText.DialyText(Random.Range(4, 10), 1);
-        MoneyTairyokuCalcu();
+        //MoneyTairyokuCalcu();
         fade.FadeOpnig();
         moneyText.text = "所持金：\n" + moneys + "円";
         dayText.text = days + "日目";      
@@ -126,6 +126,8 @@ public class GameMain : MonoBehaviour
     public void Clear()
     {
         Debug.Log("Loaded 'Clear' method.");
+        
+        
         SceneManager.LoadScene("GamePlay");
     }
 
@@ -174,6 +176,11 @@ public class GameMain : MonoBehaviour
     public float Tairyoku()
     {
         return tairyoku;
+    }
+
+    public int Money()
+    {
+        return moneys;
     }
 
     public void Kyuuryou()

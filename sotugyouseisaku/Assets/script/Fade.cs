@@ -51,10 +51,23 @@ public class Fade : MonoBehaviour
     {
         OpenDay.gameObject.SetActive(true);
         FadeOut.gameObject.SetActive(true);
-        OpenDay.text = "死 ん だ";
+        if(gameMain.Money()<=0)
+        {
+            OpenDay.text = "お金がなくなった";
+        }
+        else if(foodManager.Deathbool() == true)
+        {
+            OpenDay.text = "死 ん だ";
+        }
+        
     }
 
-    //public void 
+    public void FadeGameClear()
+    {
+        OpenDay.gameObject.SetActive(true);
+        FadeOut.gameObject.SetActive(true);
+        OpenDay.text = "生き延びた！";
+    }
     /// <summary>
     /// シーンを設定
     /// </summary>
@@ -128,8 +141,9 @@ public class Fade : MonoBehaviour
                             OpenDay.color = new Color(OpenDay.color.r, OpenDay.color.g, OpenDay.color.b, 1);
                             FadeOut.color = new Color(FadeOut.color.r, FadeOut.color.g, FadeOut.color.b, 1);
                             
-                            if (foodManager.Deathbool() == true)
-                            {                             
+                            if (foodManager.Deathbool() == true||gameMain.Money()<=0)
+                            {
+                                
                                 ScneSelect(Fade.Gamestate.GameOver);
                             }
                             else
@@ -160,7 +174,7 @@ public class Fade : MonoBehaviour
                 }
                 break;
             //case Gamestate.Clear:
-            //    if(fadeIn)
+            //    if (fadeIn)
             //    {
 
             //    }

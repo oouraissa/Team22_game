@@ -403,7 +403,7 @@ public class EventManager : MonoBehaviour
 
     public void EventOpning()
     {              
-        GetItem();
+        //GetItem();
         StockBotton();
         WriteEvent();
         // WriteEvent();

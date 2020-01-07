@@ -3446,6 +3446,7 @@ MonoBehaviour:
   gameMain: {fileID: 31103715}
   fade: {fileID: 1321378556}
   foodManager: {fileID: 1751647103}
+  eventManager: {fileID: 2117327624}
   novelspeed: 0
 --- !u!82 &1099739392
 AudioSource:

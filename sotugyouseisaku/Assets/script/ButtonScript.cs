@@ -19,6 +19,7 @@ public class ButtonScript : MonoBehaviour
     public GameMain gameMain;
     public Fade fade;
     public FoodManager foodManager;
+    public EventManager eventManager;
     public float novelspeed;
     private bool firstClick;
     private bool lastClick;
@@ -75,11 +76,7 @@ public class ButtonScript : MonoBehaviour
                     gameMain.MiniGame();
             }
 
-            if (gameMain.ReturnForDays() >= 100)
-            {
-                fade.currentstate = Fade.Gamestate.Clear;
-                fade.FadeIn(true);
-            }
+           
             button4.gameObject.SetActive(false);
         }
         if(fade.Gamestates()==Fade.Gamestate.GameOver)
@@ -112,9 +109,18 @@ public class ButtonScript : MonoBehaviour
                     foodManager.SelectByouki();
                     foodManager.ByoukiText();
                     foodManager.SpecialDeath();
+                    eventManager.GetItem();
+                    gameMain.MoneyTairyokuCalcu();
                     fade.FadeIn(true);
-                    if (foodManager.Deathbool() == true)
+                    Debug.Log(gameMain.Money());
+                    if (gameMain.ReturnForDays() >= 100)
                     {
+                        gameMain.Clear();
+                        fade.currentstate = Fade.Gamestate.Clear;
+                        fade.FadeIn(true);
+                    }
+                    if (foodManager.Deathbool() == true||gameMain.Money()<=0)
+                    {                      
                         //foodManager.ByoukiText();
                         gameMain.GameOver();
                         //fade.FadeIn(true);                        
