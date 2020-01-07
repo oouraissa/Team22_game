@@ -355,7 +355,7 @@ public class EventManager : MonoBehaviour
         Debug.Log("イベントカウント"+dayincIdence);
         if (dayincIdence<3&&eventlimit==false)
         {
-            int a = Random.Range(2, 3);
+            int a = Random.Range(1, 9);
             switch (a)
             {
                 case 1: Eventinsidence(EventScript.Item.Stock); eventlimit = true; break;
