@@ -157,6 +157,10 @@ public class FoodManager : MonoBehaviour
     /// </summary>
     public void MoneyandTairyokuReset()
     {
+        foreach(Transform i in transform)
+        {
+            i.gameObject.GetComponent<Foodscript>().Resetselect();
+        }
         foodmoney = 0;
         tairyoku = 0;
     }

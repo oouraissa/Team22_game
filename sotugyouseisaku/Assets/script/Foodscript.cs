@@ -30,7 +30,7 @@ public class Foodscript : MonoBehaviour
 
    
    
-    private List<Foods> currentfoods = new List<Foods>();
+    private Foods currentfoods;
     private int foodsick;
     private int smallCount;
     private int leargeCount;
@@ -72,43 +72,43 @@ public class Foodscript : MonoBehaviour
         switch (oldfoods)
         {
             case Foods.Beer:
-                currentfoods.Add(Foods.Beer);
+                currentfoods=Foods.Beer;
                 tairyoku += 20;
-                foodmoney += 300;
+                foodmoney += 200;
                 Beer.interactable = false;
                 break;
             case Foods.Ryokutya:
-                currentfoods.Add(Foods.Ryokutya);
+                currentfoods=Foods.Ryokutya;
                 tairyoku += 5;
-                foodmoney += 160;
+                foodmoney += 120;
                 Ryokutya.interactable = false;
                 break;
             case Foods.StrongZero:
-                currentfoods.Add(Foods.StrongZero);
+                currentfoods=Foods.StrongZero;
                 tairyoku += 15;
-                foodmoney += 150;
+                foodmoney += 110;
                 StrongZero.interactable = false;
                 break;
             case Foods.Been:
-                currentfoods.Add(Foods.Been);
+                currentfoods=Foods.Been;
                 tairyoku += 2;
-                foodmoney += 100;
+                foodmoney += 200;
                 Been.interactable = false;
                 break;
             case Foods.Steak:
-                currentfoods.Add(Foods.Steak);
+                currentfoods=Foods.Steak;
                 tairyoku += 40;
                 foodmoney += 2000;
                 Steak.interactable = false;
                 break;
             case Foods.Ramen:
-                currentfoods.Add(Foods.Ramen);
+                currentfoods=Foods.Ramen;
                 tairyoku += 20;
-                foodmoney += 650;
+                foodmoney += 600;
                 Ramen.interactable = false;
                 break;            
             case Foods.Bento:
-                currentfoods.Add(Foods.Bento);
+                currentfoods=Foods.Bento;
                 tairyoku += 40;
                 foodmoney += 0;
                 Bento.interactable = false;
@@ -117,21 +117,21 @@ public class Foodscript : MonoBehaviour
                 this.smallCount++;
                 foodmoney += 2000;
                 tairyoku +=1;
-                currentfoods.Add(Foods.SmallDrug);
+                currentfoods=Foods.SmallDrug;
                 SmallDrug.interactable = false;
                 break;
             case Foods.LeargeDrug:
                 this.leargeCount++;
                 foodmoney += 5000;
                 tairyoku += 1;
-                currentfoods.Add(Foods.LeargeDrug);
+                currentfoods=Foods.LeargeDrug;
                 LeargeDrug.interactable = false;
                 break;
             case Foods.BigDrug:
                 this.bigCount++;
                 foodmoney += 10000;
                 tairyoku += 1;
-                currentfoods.Add(Foods.BigDrug);
+                currentfoods=Foods.BigDrug;
                 BigDrug.interactable = false;
                 break;
         }
@@ -140,9 +140,8 @@ public class Foodscript : MonoBehaviour
 
     public void Resetselect()
     {
-       
-       
-        
+        foodmoney = 0;
+        tairyoku = 0;        
     }
     public void ResetCount()
     {

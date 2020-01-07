@@ -223,7 +223,6 @@ public class EventManager : MonoBehaviour
                     case EventScript.Item.Stock:firstMoney += 15000;break;
                     case EventScript.Item.Earthquakeinsurance:firstMoney += 10000;break;
                     case EventScript.Item.Fireinsurance:firstMoney += 10000;break;
-
                 }
             }            
         }
@@ -356,7 +355,7 @@ public class EventManager : MonoBehaviour
         Debug.Log("イベントカウント"+dayincIdence);
         if (dayincIdence<3&&eventlimit==false)
         {
-            int a = Random.Range(5, 6);
+            int a = Random.Range(2, 3);
             switch (a)
             {
                 case 1: Eventinsidence(EventScript.Item.Stock); eventlimit = true; break;
