@@ -75,22 +75,30 @@ public class EventManager : MonoBehaviour
     /// <param name="disaster">災害の名前</param>
     public void Disasterinsidence(EventScript.Disaster disaster)
     {
-        this.currentdisaster = disaster;
-        switch(disaster)
-        {           
-            case EventScript.Disaster.Fire:
-                this.disaster = true;
-                Debug.Log("火災イベント");
-                eventText.text = GameObject.Find("GameText").GetComponent<GameText>().EventText(8, 1);
-                DouguCheck(EventScript.Item.Fireinsurance);
-                break;//火災イベント
-            case EventScript.Disaster.Earthquake:
-                this.disaster = true;
-                Debug.Log("地震イベント");
-                eventText.text = GameObject.Find("GameText").GetComponent<GameText>().EventText(10, 1);
-                DouguCheck(EventScript.Item.Earthquakeinsurance);
-                break;//火災イベント
+        if(gameMain.ReturnForDays()>=8)
+        {
+            this.currentdisaster = disaster;
+            switch (disaster)
+            {
+                case EventScript.Disaster.Fire:
+                    this.disaster = true;
+                    Debug.Log("火災イベント");
+                    eventText.text = GameObject.Find("GameText").GetComponent<GameText>().EventText(8, 1);
+                    DouguCheck(EventScript.Item.Fireinsurance);
+                    break;//火災イベント
+                case EventScript.Disaster.Earthquake:
+                    this.disaster = true;
+                    Debug.Log("地震イベント");
+                    eventText.text = GameObject.Find("GameText").GetComponent<GameText>().EventText(10, 1);
+                    DouguCheck(EventScript.Item.Earthquakeinsurance);
+                    break;//火災イベント
 
+            }
+        }
+        else
+        {
+            this.currentdisaster = EventScript.Disaster.End;
+            eventText.text = GameObject.Find("GameText").GetComponent<GameText>().EventText(20, 1);
         }
     }
 
@@ -355,7 +363,7 @@ public class EventManager : MonoBehaviour
         Debug.Log("イベントカウント"+dayincIdence);
         if (dayincIdence<3&&eventlimit==false)
         {
-            int a = Random.Range(1, 9);
+            int a = Random.Range(4, 5);
             switch (a)
             {
                 case 1: Eventinsidence(EventScript.Item.Stock); eventlimit = true; break;

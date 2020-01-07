@@ -150,6 +150,15 @@ public class Foodscript : MonoBehaviour
         bigCount = 0;
     }
 
+    /// <summary>
+    /// フード名をstring型で返す
+    /// </summary>
+    /// <returns>フードの名前</returns>
+    public string CurrentFoods()
+    {
+        return currentfoods.ToString();
+    }
+
     public bool BigCount()
     {
         int a = Random.Range(10, 21);

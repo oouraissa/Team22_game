@@ -131,7 +131,7 @@ public class ButtonScript : MonoBehaviour
                         gameMain.Opning();
                         button4.gameObject.SetActive(true);
                         Imagesposition.SetActive(false);
-                        foodManager.ResetFoodselect();
+                        
                         //fade.FadeIn(true);                       
                     }
                     lastClick = false;

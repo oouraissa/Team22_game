@@ -178,17 +178,6 @@ public class FoodManager : MonoBehaviour
         return tairyoku;
     }
 
-    public void ResetFoodselect()
-    {
-        tairyoku = 0;
-        foodmoney = 0;
-        foreach (var b in buttos)
-        {           
-             b.interactable = true;           
-        }
-
-    }
-
     /// <summary>
     /// 食べ物の値段
     /// </summary>
