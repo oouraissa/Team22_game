@@ -126,7 +126,7 @@ public class GameMain : MonoBehaviour
         Debug.Log("Loaded 'Clear' method.");
         
         
-        SceneManager.LoadScene("GamePlay");
+        SceneManager.LoadScene("Title");
     }
 
     public void GameOver()
