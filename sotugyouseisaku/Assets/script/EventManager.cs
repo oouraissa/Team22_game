@@ -75,8 +75,7 @@ public class EventManager : MonoBehaviour
     /// <param name="disaster">災害の名前</param>
     public void Disasterinsidence(EventScript.Disaster disaster)
     {
-        if(gameMain.ReturnForDays()>=8)
-        {
+       
             this.currentdisaster = disaster;
             switch (disaster)
             {
@@ -93,13 +92,8 @@ public class EventManager : MonoBehaviour
                     DouguCheck(EventScript.Item.Earthquakeinsurance);
                     break;//火災イベント
 
-            }
-        }
-        else
-        {
-            this.currentdisaster = EventScript.Disaster.End;
-            eventText.text = GameObject.Find("GameText").GetComponent<GameText>().EventText(20, 1);
-        }
+            }        
+       
     }
 
     /// <summary>
@@ -188,7 +182,7 @@ public class EventManager : MonoBehaviour
     }
 
     /// <summary>
-    /// アイテムを取得
+    /// アイテムを取得と災害発生
     /// </summary>
     public void GetItem()
     {
@@ -205,6 +199,7 @@ public class EventManager : MonoBehaviour
                     downTairyoku += 20;
                     break;
             }
+            //currentdisaster = EventScript.Disaster.End;
         }
         else
         {
@@ -219,6 +214,7 @@ public class EventManager : MonoBehaviour
                     downTairyoku += 5;
                     break;
             }
+            //currentdisaster = EventScript.Disaster.End;
         }
         if(eventbool==true)
         {         
@@ -282,10 +278,10 @@ public class EventManager : MonoBehaviour
     /// <returns></returns>
     public int MainMoney()
     {
-        downMoney += firstMoney;
-        firstMoney = 0;
-        Debug.Log("払うお金"+downMoney+"+"+"貰うお金"+upMoney);
-        return downMoney -upMoney;
+        //downMoney += firstMoney;
+        //firstMoney = 0;
+        Debug.Log("払うお金"+downMoney+"+"+firstMoney+"+"+"貰うお金"+upMoney);
+        return (downMoney+firstMoney) -upMoney;
     }
 
     public string StutusText()
@@ -358,26 +354,40 @@ public class EventManager : MonoBehaviour
     {
         dayincIdence++;
         downMoney = 0;
+        firstMoney = 0;
         downTairyoku = 0;
         upMoney = 0;
         Debug.Log("イベントカウント"+dayincIdence);
-        if (dayincIdence<3&&eventlimit==false)
+        if (dayincIdence < 3 && eventlimit == false&&gameMain.ReturnForDays()!=1)
         {
-            int a = Random.Range(4, 5);
+            int a = Random.Range(1, 6);
             switch (a)
             {
                 case 1: Eventinsidence(EventScript.Item.Stock); eventlimit = true; break;
                 case 2: Eventinsidence(EventScript.Item.Fireinsurance); eventlimit = true; break;
                 case 3: Eventinsidence(EventScript.Item.Earthquakeinsurance); eventlimit = true; break;
-                case 4: Disasterinsidence(EventScript.Disaster.Fire); eventlimit = true; break;
-                case 5: Disasterinsidence(EventScript.Disaster.Earthquake); eventlimit = true; break;
+                case 4:
+                    if (gameMain.ReturnForDays() >= 8)
+                    {
+                        Disasterinsidence(EventScript.Disaster.Fire); eventlimit = true; break;
+                    }
+                    else
+                        Eventinsidence(EventScript.Item.Other); break;
+
+                case 5:
+                    if (gameMain.ReturnForDays() >= 8)
+                    {
+                        Disasterinsidence(EventScript.Disaster.Earthquake); eventlimit = true; break;
+                    }
+                    else
+                        Eventinsidence(EventScript.Item.Other); break;
             }
-            if(a>=6)
+            if (a >= 6)
             {
-                Eventinsidence(EventScript.Item.Other); 
+                Eventinsidence(EventScript.Item.Other);
             }
         }
-        else if (dayincIdence >= 3)
+        else if (dayincIdence >= 3&& gameMain.ReturnForDays() != 1)
         {
             int a = Random.Range(1, 4);
             if (a == 1 && eventlimit == false)
@@ -398,7 +408,7 @@ public class EventManager : MonoBehaviour
             dayincIdence = 0;
             eventlimit = false;
         }
-        else if (eventlimit == true)
+        else if (eventlimit == true || gameMain.ReturnForDays() == 1)
         {
             Debug.Log("other");
             Eventinsidence(EventScript.Item.Other);

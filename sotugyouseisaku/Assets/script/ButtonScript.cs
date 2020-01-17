@@ -17,6 +17,7 @@ public class ButtonScript : MonoBehaviour
     public Text button4text;
     public Button button4;
     public GameMain gameMain;
+    public DialyScript dialy;
     public Fade fade;
     public FoodManager foodManager;
     public EventManager eventManager;
@@ -67,14 +68,14 @@ public class ButtonScript : MonoBehaviour
             //fade.ScneSelect(Fade.Gamestate.GamePlay);
             firstImages = true;
 
-            if (gameMain.ReturnForGMiniLeft() > 0)
-            {
-                gameMain.GMiniSubtract();
-                Debug.Log($"int.miniGameLeft has decreased: {gameMain.ReturnForGMiniLeft().ToString()}");
-                Debug.Log($"int.rndMiniGame set: {gameMain.ReturnForRndGMini().ToString()}");
-                if(gameMain.ReturnForRndGMini()==0)
-                    gameMain.MiniGame();
-            }
+            //if (gameMain.ReturnForGMiniLeft() > 0)
+            //{
+            //    gameMain.GMiniSubtract();
+            //    Debug.Log($"int.miniGameLeft has decreased: {gameMain.ReturnForGMiniLeft().ToString()}");
+            //    Debug.Log($"int.rndMiniGame set: {gameMain.ReturnForRndGMini().ToString()}");
+            //    if(gameMain.ReturnForRndGMini()==0)
+            //        gameMain.MiniGame();
+            //}
 
            
             button4.gameObject.SetActive(false);
@@ -105,7 +106,6 @@ public class ButtonScript : MonoBehaviour
             case 1:               
                 if(lastClick&&fade.Gamestates()==Fade.Gamestate.GamePlay)
                 {
-                             
                     foodManager.SelectByouki();
                     foodManager.ByoukiText();
                     foodManager.SpecialDeath();
@@ -113,24 +113,24 @@ public class ButtonScript : MonoBehaviour
                     gameMain.MoneyTairyokuCalcu();
                     fade.FadeIn(true);
                     Debug.Log(gameMain.Money());
-                    if (gameMain.ReturnForDays() >= 100)
+                    if (gameMain.ReturnForDays() >= 100||dialy.FamilyClear())
                     {
                         gameMain.Clear();
                         fade.currentstate = Fade.Gamestate.Clear;
                         fade.FadeIn(true);
                     }
-                    if (foodManager.Deathbool() == true||gameMain.Money()<=0)
+                    else if (foodManager.Deathbool() == true||gameMain.Money()<=0)
                     {                      
                         //foodManager.ByoukiText();
                         gameMain.GameOver();
                         //fade.FadeIn(true);                        
-                    }
+                    }                   
                     else
                     {
                         //foodManager.Heal();                       
                         gameMain.Opning();
                         button4.gameObject.SetActive(true);
-                        Imagesposition.SetActive(false);
+                        Imagesposition.SetActive(false);//日記を非表示に
                         
                         //fade.FadeIn(true);                       
                     }
@@ -274,9 +274,9 @@ public class ButtonScript : MonoBehaviour
             Imagesposition.transform.position = new Vector2(0f, Imagesposition.transform.position.y);
             Imagesspeed = 0;
         }
-        if (Imagesposition.transform.position.x >= 12.1f)
+        if (Imagesposition.transform.position.x >= 12.5f)
         {
-            Imagesposition.transform.position = new Vector2(12f, Imagesposition.transform.position.y);
+            Imagesposition.transform.position = new Vector2(12.4f, Imagesposition.transform.position.y);
             Imagesspeed = 0;
         }
 

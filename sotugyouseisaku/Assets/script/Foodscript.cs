@@ -134,12 +134,12 @@ public class Foodscript : MonoBehaviour
                 currentfoods=Foods.BigDrug;
                 BigDrug.interactable = false;
                 break;
-        }
-        
+        }        
     }
 
     public void Resetselect()
     {
+       
         foodmoney = 0;
         tairyoku = 0;        
     }

@@ -288,14 +288,11 @@ public class Fade : MonoBehaviour
 
     public Gamestate Gamestates()
     {
+
         return currentstate;
     }
     // Start is called before the first frame update
     
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    
 }

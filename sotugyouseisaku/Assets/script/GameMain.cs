@@ -25,15 +25,15 @@ public class GameMain : MonoBehaviour
     public Fade fade;
     public FoodManager foodManager;
     public EventManager eventManager;
-    
-    private string dialytext;
-   
+    public DialyScript dialy;
+    //private string dialytext;
+
     private string statustext;
 
     public Text dayText;
     public Text moneyText;
-    public Text Image1;
-    public Text Image2;
+    //public Text Image1;
+   
    
     
     //public Text clearedLamp;
@@ -53,10 +53,8 @@ public class GameMain : MonoBehaviour
         health = 50;
         tairyoku = 64;
         
-        gameText.TextSelect();       
-        dialytext = gameText.DialyText();
-        
-        statustext = gameText.StatusText();
+        gameText.TextSelect();
+        dialy.FamilyEventText();
         
         moneyText.text = "所持金：\n" + moneys + "円";
         dayText.text = days + "日目";
@@ -68,7 +66,7 @@ public class GameMain : MonoBehaviour
     {
         days++;
         eventManager.EventOpning();
-        dialytext = eventManager.StutusText() + gameText.DialyText(Random.Range(4, 10), 1);
+        dialy.FamilyEventText();
         //MoneyTairyokuCalcu();
         fade.FadeOpnig();
         moneyText.text = "所持金：\n" + moneys + "円";
@@ -81,10 +79,10 @@ public class GameMain : MonoBehaviour
         //buttonScript.PositionReset();
         
 
-        Kyuuryou();
+        
 
 
-        statustext = SelectStatusText();
+        
         
         if (days <= (100 - 7)) 
         {
@@ -110,8 +108,8 @@ public class GameMain : MonoBehaviour
     public void GamePlay()
     {       
         Debug.Log("Loaded method GamePlay");
-        Debug.Log(dialytext + "+" + statustext);
-        Image1.text = dialytext+"\n\n"+statustext;
+
+        
         eventManager.EventGamePlay();
         tairyoku -= Random.Range(15, 31);
         
@@ -135,9 +133,12 @@ public class GameMain : MonoBehaviour
     {  
         days++;
         fade.FadeGameOver();
+        if(moneys<=0)
+        {
+            moneys = 0;
+        }
         moneyText.text = "所持金：\n" + moneys + "円";
         dayText.text = days + "日目";
-        
         Debug.Log(moneys + "と" + tairyoku);
         foodManager.MoneyandTairyokuReset();
         buttonScript.PositionReset();
@@ -183,13 +184,17 @@ public class GameMain : MonoBehaviour
         return moneys;
     }
 
-    public void Kyuuryou()
+    public string Kyuuryou()
     {
-        if(days%7==1)
+        string a="";
+        if (days % 7 == 0)
         {
             moneys += 15000;
-            dialytext+= gameText.DialyText(3, 1);
+            a = gameText.DialyText(2, 1)+"+15000円";
         }
+        else
+            a = "";
+        return a+"\n";
     }
 
     void Update()
@@ -201,7 +206,7 @@ public class GameMain : MonoBehaviour
 
     public void MoneyTairyokuCalcu()
     {
-        moneys -= foodManager.Moneys()+eventManager.MainMoney();
+        moneys -= foodManager.Moneys()+eventManager.MainMoney()+dialy.FamilyEventPay();
         tairyoku += foodManager.Tairyoku()-eventManager.MainTairyokuDown();      
         Debug.Log(moneys);
         Debug.Log(tairyoku);

@@ -10,6 +10,7 @@ public class FoodManager : MonoBehaviour
     public Foodscript smalldrug;
     public Foodscript leargedrug;
     public Foodscript BigDrug;
+    public List<Button> buttons;
     public int foodmoney;
     public Image byoukiImage;
     public Text Listtext;
@@ -158,8 +159,12 @@ public class FoodManager : MonoBehaviour
     public void MoneyandTairyokuReset()
     {
         foreach(Transform i in transform)
-        {
+        {            
             i.gameObject.GetComponent<Foodscript>().Resetselect();
+        }
+        foreach(Button b in buttons)
+        {
+            b.interactable = true;
         }
         foodmoney = 0;
         tairyoku = 0;
@@ -186,7 +191,7 @@ public class FoodManager : MonoBehaviour
     {
         foreach (Transform i in transform)
         {
-           
+            
             foodmoney += i.gameObject.GetComponent<Foodscript>().SelectFood();
         }
         return foodmoney;
@@ -206,7 +211,7 @@ public class FoodManager : MonoBehaviour
         }
         else if (currenttairyoku > 0 && currenttairyoku <= 20)
         {
-            int random = Random.Range(1, 3);       
+            int random = Random.Range(1, 4);       
             if (random == 1)
             {                
                 Byouki haien = new Byouki(Byouki.Byoukistate.肺炎, 10, gameMain.ReturnForDays());

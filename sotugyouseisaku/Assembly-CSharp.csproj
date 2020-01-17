@@ -65,6 +65,7 @@
     <Compile Include="Assets\HowToTrigger.cs" />
     <Compile Include="Assets\script\ButtonScript.cs" />
     <Compile Include="Assets\script\Byouki.cs" />
+    <Compile Include="Assets\script\DialyScript.cs" />
     <Compile Include="Assets\script\EventManager.cs" />
     <Compile Include="Assets\script\EventScript.cs" />
     <Compile Include="Assets\script\Fade.cs" />
