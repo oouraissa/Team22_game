@@ -41,17 +41,15 @@ public class GameMain : MonoBehaviour
     public int rndMGLimit = 25;
 
     private void Start()
-    {
-        
-        fadeIn = false;
-       
+    {        
+        fadeIn = false;      
         pickingFlag = false;//I dont get it how work
         days = 1;
         miniGameLeft = 0;
         rndMiniGame = 0;
         moneys = 30000;
         health = 50;
-        tairyoku = 64;
+        tairyoku = 100;
         
         gameText.TextSelect();
         dialy.FamilyEventText();
@@ -66,6 +64,7 @@ public class GameMain : MonoBehaviour
     {
         days++;
         eventManager.EventOpning();
+        //MoneyTairyokuCalcu();
         dialy.FamilyEventText();
         //MoneyTairyokuCalcu();
         fade.FadeOpnig();
@@ -76,14 +75,7 @@ public class GameMain : MonoBehaviour
         buttonScript.PositionReset();
         Debug.Log($"'Days' has increased: {days} days");
         Debug.Log("Loaded method Opening");
-        //buttonScript.PositionReset();
-        
-
-        
-
-
-        
-        
+        //buttonScript.PositionReset();        
         if (days <= (100 - 7)) 
         {
             if((days % 7) == 0)
@@ -111,7 +103,7 @@ public class GameMain : MonoBehaviour
 
         
         eventManager.EventGamePlay();
-        tairyoku -= Random.Range(15, 31);
+        tairyoku -= 15/*Random.Range(15, 31)*/;
         
         //Image1.text = dialytext + "\n\n" + eventtext + "\n\n" + statustext;              
     }
@@ -124,8 +116,9 @@ public class GameMain : MonoBehaviour
     public void Clear()
     {
         Debug.Log("Loaded 'Clear' method.");
-        
-        
+        eventManager.EventOpning();
+        MoneyTairyokuCalcu();
+
         SceneManager.LoadScene("Title");
     }
 

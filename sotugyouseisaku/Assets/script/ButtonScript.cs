@@ -109,7 +109,7 @@ public class ButtonScript : MonoBehaviour
                     foodManager.SelectByouki();
                     foodManager.ByoukiText();
                     foodManager.SpecialDeath();
-                    eventManager.GetItem();
+                    eventManager.Calcu();
                     gameMain.MoneyTairyokuCalcu();
                     fade.FadeIn(true);
                     Debug.Log(gameMain.Money());

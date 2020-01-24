@@ -40,10 +40,6 @@ public class DialyScript : MonoBehaviour
        
         if(familybool&&gameMain.ReturnForDays()%7==0)
         {
-            
-
-          
-
             familyMoneyButton.gameObject.SetActive(true);
             switch (familycount)
             {
