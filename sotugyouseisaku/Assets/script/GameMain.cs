@@ -44,7 +44,7 @@ public class GameMain : MonoBehaviour
     {        
         fadeIn = false;      
         pickingFlag = false;//I dont get it how work
-        days = 1;
+        days = 6;
         miniGameLeft = 0;
         rndMiniGame = 0;
         moneys = 30000;
@@ -52,7 +52,7 @@ public class GameMain : MonoBehaviour
         tairyoku = 100;
         
         gameText.TextSelect();
-        dialy.FamilyEventText();
+        //dialy.FamilyEventText();
         
         moneyText.text = "所持金：\n" + moneys + "円";
         dayText.text = days + "日目";

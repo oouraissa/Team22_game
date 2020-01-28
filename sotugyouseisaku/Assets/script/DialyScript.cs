@@ -36,8 +36,7 @@ public class DialyScript : MonoBehaviour
 
 
     public void FamilyEventText()
-    {
-       
+    {      
         if(familybool&&gameMain.ReturnForDays()%7==0)
         {
             familyMoneyButton.gameObject.SetActive(true);
